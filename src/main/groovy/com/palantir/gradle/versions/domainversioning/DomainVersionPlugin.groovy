@@ -24,7 +24,7 @@ class DomainVersionPlugin implements Plugin<Project> {
 	public static final String GROUP = "Domain Versioning";
 	private static final String DOMAIN_OVERRIDE_PROPERTY = "DOMAIN_VERSION_DOMAIN_OVERRIDE";
 	private static final String DOMAIN_TAG_PROPERTY = "DOMAIN_VERSION_USE_TAG";
-	private static int hashLength = 12;
+	private static int hashLength = 12; //TODO: Configurable?
 	
 	@Override
 	public void apply(Project project) {
@@ -81,9 +81,9 @@ class DomainVersionPlugin implements Plugin<Project> {
 			domain = System.env[DOMAIN_OVERRIDE_PROPERTY];
 		} else if (System.env[DOMAIN_TAG_PROPERTY] != null && domainIfTag != null) {
 			domain = domainIfTag;
+			return domain;
 		} else if (userDomain != null && !userDomain.trim().isEmpty()) {
 			domain = userDomain;
-			return domain;
 		} else if (headRef.isSymbolic()){
 			String targetName = headRef.getTarget().getName();
 			if (targetName.startsWith("refs/heads/")) {
@@ -96,7 +96,7 @@ class DomainVersionPlugin implements Plugin<Project> {
 	}
 	
 	private static Repository getRepo(Project project) {
-		File repoLocation = Paths.get(project.projectDir, ".git").toFile();
+		File repoLocation = Paths.get(project.projectDir.toString(), ".git").toFile();
 		Repository repo;
 		try {
 			repo = new FileRepositoryBuilder().readEnvironment()

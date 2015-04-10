@@ -17,3 +17,15 @@ dependencies {
   compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
 }
 
+publishing {
+  publications {
+    ivy(IvyPublication) {
+	  from components.java
+    }
+  }
+  repositories {
+    ivy {
+      url "$buildDir/dist/"
+    }
+  }
+}
