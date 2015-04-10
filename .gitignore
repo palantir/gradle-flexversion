@@ -1,0 +1,10 @@
+**.gradle/
+**.ecbuild/
+**build/
+**bin/
+**.settings/
+**.project
+**.classpath
+**.DS_Store
+**.swp
+.idea/
