@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 
 group="com.palantir"
-version="1.0.0"
+version="0.1.0"
 
 repositories {
   mavenCentral()
@@ -17,3 +17,15 @@ dependencies {
   compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
 }
 
+publishing {
+  publications {
+    ivy(IvyPublication) {
+	  from components.java
+    }
+  }
+  repositories {
+    ivy {
+      url "$buildDir/dist/"
+    }
+  }
+}
