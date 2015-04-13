@@ -32,7 +32,7 @@ it will use the tag `git describe` would have picked.
 
 The plugin will pick a domain in the following order:
 1. Set by environment variable `DOMAIN_VERSION_DOMAIN_OVERRIDE` (i.e. `DOMAIN_VERSION_DOMAIN_OVERRIDE=foo ./gradlew build`)
-2. Set by a tag if and only if environment variable `DOMAIN_VERSION_USE_TAG` is set and the commit has a tag
+2. Set by a tag if and only if environment variable `DOMAIN_VERSION_USE_TAG` is set and the commit has a tag. (No commit #s or hash are appended in this case)
 3. Passed in by the user as a parameter to `domainVersion()`.  **This method is very discouraged because it will cause merge conflicts and isn't deterministic**
 4. Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
 5. The value `unspecified`
