@@ -24,7 +24,6 @@ class DomainVersionPlugin implements Plugin<Project> {
 	public static final String GROUP = "Domain Versioning";
 	private static final String DOMAIN_OVERRIDE_PROPERTY = "DOMAIN_VERSION_DOMAIN_OVERRIDE";
 	private static final String DOMAIN_TAG_PROPERTY = "DOMAIN_VERSION_USE_TAG";
-	private static int hashLength = 12; //TODO: Configurable?
 	
 	@Override
 	public void apply(Project project) {
@@ -83,7 +82,7 @@ class DomainVersionPlugin implements Plugin<Project> {
 			domain = domainIfTag;
 			return domain;
 		} else if (userDomain != null && !userDomain.trim().isEmpty()) {
-			domain = userDomain;
+			domain = userDomain.trim();
 		} else if (headRef.isSymbolic()){
 			String targetName = headRef.getTarget().getName();
 			if (targetName.startsWith("refs/heads/")) {
@@ -92,7 +91,7 @@ class DomainVersionPlugin implements Plugin<Project> {
 			domain = targetName.replaceAll("/", "-");
 		}
 		
-		return "${domain}-${commitCount}-g${headSha1.substring(0,hashLength)}";
+		return "${domain}-${commitCount}-g${headSha1.substring(0,12)}";
 	}
 	
 	private static Repository getRepo(Project project) {
