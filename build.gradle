@@ -17,10 +17,18 @@ dependencies {
   compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
 }
 
+task sourceJar(type: Jar) {
+      from sourceSets.main.allSource
+}
+
 publishing {
   publications {
     ivy(MavenPublication) {
-	  from components.java
+      from components.java
+
+      artifact(sourceJar) {
+        classifier "sources"
+      }
     }
   }
   repositories {
