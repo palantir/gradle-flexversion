@@ -19,6 +19,7 @@ dependencies {
 
 task sourceJar(type: Jar) {
       from sourceSets.main.allSource
+      classifier "sources"
 }
 
 publishing {
