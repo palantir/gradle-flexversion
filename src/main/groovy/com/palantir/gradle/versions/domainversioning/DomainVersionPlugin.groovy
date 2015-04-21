@@ -67,6 +67,10 @@ class DomainVersionPlugin implements Plugin<Project> {
         }
 
 
+        // Dirty bit
+        String dirty = Git.wrap(repo).status().call().isClean() ? "" : "-dirty";
+
+
         /*
          * Choose a domain in decreasing priority:
          * 1. Set by environment variable
@@ -80,7 +84,7 @@ class DomainVersionPlugin implements Plugin<Project> {
             domain = System.env[DOMAIN_OVERRIDE_PROPERTY];
         } else if (System.env[DOMAIN_TAG_PROPERTY] != null && domainIfTag != null) {
             domain = domainIfTag;
-            return domain;
+            return "${domain}${dirty}";
         } else if (userDomain != null && !userDomain.trim().isEmpty()) {
             domain = userDomain.trim();
         } else if (headRef.isSymbolic()){
@@ -91,7 +95,7 @@ class DomainVersionPlugin implements Plugin<Project> {
             domain = targetName.replaceAll("/", "-");
         }
 
-        return "${domain}-${commitCount}-g${headSha1.substring(0,12)}";
+        return "${domain}-${commitCount}-g${headSha1.substring(0,12)}${dirty}";
     }
 
     private static Repository getRepo(Project project) {
