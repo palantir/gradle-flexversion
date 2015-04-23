@@ -34,3 +34,6 @@ The plugin will pick a domain in the following order:
 4. Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
 5. The value `unspecified`
 
+# LICENSE
+
+Stash Disapproval Plugin is released by Palantir Technologies, Inc. under the Apache 2.0 License. see the included LICENSE file for details.
