@@ -36,4 +36,4 @@ The plugin will pick a domain in the following order:
 
 # LICENSE
 
-Stash Disapproval Plugin is released by Palantir Technologies, Inc. under the Apache 2.0 License. see the included LICENSE file for details.
+Gradle Domain Version is released by Palantir Technologies, Inc. under the Apache 2.0 License. see the included LICENSE file for details.
