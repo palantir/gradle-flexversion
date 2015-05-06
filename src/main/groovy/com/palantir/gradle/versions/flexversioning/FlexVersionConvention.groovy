@@ -11,23 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.palantir.gradle.versions.domainversioning;
+package com.palantir.gradle.versions.flexversioning;
 
 import org.gradle.api.Project;
 
-public class DomainVersionConvention {
+public class FlexVersionConvention {
 
     private Project project;
 
-    public DomainVersionConvention(Project project) {
+    public FlexVersionConvention(Project project) {
         this.project = project;
     }
 
-    public String domainVersion() {
-        return DomainVersionPlugin.buildDomainVersion(project, null);
+    public String flexVersion() {
+        return FlexVersionPlugin.buildFlexVersion(project, null);
     }
 
-    public String domainVersion(String userDomain) {
-        return DomainVersionPlugin.buildDomainVersion(project, userDomain);
+    public String flexVersion(String userDomain) {
+        return FlexVersionPlugin.buildFlexVersion(project, userDomain);
     }
 }
