@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.palantir.gradle.versions.domainversioning
+package com.palantir.gradle.versions.flexversioning
 
 import java.nio.file.Paths;
 
@@ -32,19 +32,19 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class DomainVersionPlugin implements Plugin<Project> {
+class FlexVersionPlugin implements Plugin<Project> {
 
-    public static final String GROUP = "Domain Versioning";
-    private static final String DOMAIN_OVERRIDE_PROPERTY = "DOMAIN_VERSION_DOMAIN_OVERRIDE";
-    private static final String DOMAIN_TAG_PROPERTY = "DOMAIN_VERSION_USE_TAG";
+    public static final String GROUP = "Flex Versioning";
+    private static final String DOMAIN_OVERRIDE_PROPERTY = "FLEX_VERSION_DOMAIN_OVERRIDE";
+    private static final String DOMAIN_TAG_PROPERTY = "FLEX_VERSION_USE_TAG";
 
     @Override
     public void apply(Project project) {
-        DomainVersionConvention convention = new DomainVersionConvention(project);
-        project.getConvention().getPlugins().put("domainversion", convention);
+        FlexVersionConvention convention = new FlexVersionConvention(project);
+        project.getConvention().getPlugins().put("flexversion", convention);
     }
 
-    public static String buildDomainVersion(Project project, String userDomain) {
+    public static String buildFlexVersion(Project project, String userDomain) {
         Repository repo = getRepo(project);
 
         RevWalk walk = new RevWalk(repo);
