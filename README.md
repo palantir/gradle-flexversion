@@ -1,4 +1,4 @@
-# Flex Versioning plugin for gradle
+# Flex Versioning plugin for gradle [![Build Status](https://travis-ci.org/palantir/gradle-flexversion.svg?branch=0.1.0)](https://travis-ci.org/palantir/gradle-flexversion)
 
 ## Why?
 We created Flex Versioning for two reasons. One reason is that at Palantir, the same commit is often built and/or released in different contexts, in different "domains". As we create more of these domains (such as customer branches or patch branches) it becomes increasingly difficult to understand what artifacts belong to what domains and what commits they came from. No existing versioning scheme in wide use matches this requirement, so we have to "roll our own".
