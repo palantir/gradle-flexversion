@@ -4,5 +4,13 @@ jdk:
 cache:
   directories:
     - ".gradle"
-script: 
+script:
   - "./gradlew build --stacktrace"
+deploy:
+  provider: releases
+  api_key:
+    secure: Elq/UBlPp6tnofM6d5XP8VV1JCcuQv1pRZdQBHLzf22TSwkqdxbok20BPuu3zPp0EU+RqfN04uy8PBjSWgyiMGFswe9WweL9obX39OWCR9BobB1rBW/Bi/aIJCyUKu35wYw6vdrhaVJ00MQYZRLvB6Q9YNsWukoadSzMzuC4P3i8+lLojGmBViZNeRtt6WG6C+ahfCijrWIVn589id7h6OgT6Y4f8b6DHN9Cj82PBpWbEFuPcByFvj/ZoTw6NHyY6RWun5xTFkaPiyVBgcC353yLQlv2lW6WWdJ1LydtW9dWkRoAxzLu0E0e3U8xX3tR57g7gj/UgHW5cCfj1ersm5K2tO/0pPCVH9yXSY76KU/KyG2DUThhWSkE9dio7gI6fTR7kyCMtuZZzphlv5UoFiKOYltGxoJdYkjSQj5Seqc6h0m7Pi6H6l0Fr/V8ovG4TXPTaz2/3G/GWrDRoJ4k282/3EAZHOP1LvMGR8nJbWTd+0C148atC0qRWkbp/1I7Cejojf4igo5mfQtBXI+NXXDDMd3h15VfhiJ9+tCmITbv7Tufg7K0OmHsK9fpFfg2CWTX5nGJS6BPLmLMJcuzMKh+z2nW/MvUyqhCYLjIQteZXFPZ/8wcbIzLVkcNZZ+YdbMvdzRTKTw7RZa/meEidUgAp/ho3ESc+B8fZMo7nS4=
+  file: "build/dist/**/*" 
+  file_glob: true
+  on:
+    tags: true
