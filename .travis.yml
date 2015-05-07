@@ -1,8 +1,22 @@
 language: java
 jdk:
-  - 'oraclejdk7'
+- oraclejdk7
 cache:
   directories:
-    - ".gradle"
-script: 
-  - "./gradlew build --stacktrace"
+  - ".gradle"
+script:
+- "./gradlew build --stacktrace"
+env:
+  global:
+  - secure: NrCAeLjiwwvMFIdTVe4zEoYWMkI+FCDYoVCASolPFeVKVXvfPoBNpWmr7ipRtWbby+WvCo5O9N7XAdv6BVjDxMnWGOBvj+TG3ubeizkt/u4xy960OCbDO4Uzhwcpk/wRMuzFRn6mWvecRpZPlakEjpBZdpp7eQWgKBUFgdEA4yfTmqg2oF4IO5rvrq3b0S3UiNjUct9yCHOp+hhpqBcT3Aeh0WrTbxGnd58lGFa7pSZAK08Fikm2Gx4BOxg6Xus2NKhgi1AfbdVjLn6kvwBKq8WjBoGqcLFOqyMwY4Ejgdl5p8QGPWSPKUpmt7gBw16uEaqeY53zwuiCbhphZ4mWuPYqdI9EiCAToLaEx8rzaBTLgqah9OkT9PpxnvRUV8p43J2mChTdnsEwEMEp1cOZP375pOjdrzi6Pn+1H8sGFyTt6budrFvL0NOJfBbxZe02l8sLv/Qe6g1gY8hmBw68rPoCmN5fxlA3ETIecKU0fNJ21nE+rLrqJ+dfBRWiB3INVXsR65D7Q05SmQ2BK08S7w2kLZLF9VLLQ4ZylZeGdUQm95/gLWCygSutnirJluQ3PJKXBw4Q8/RRNqT/j3B7xvU50o8AD2cxKzUMq2hS/sjXldX6kiB4gUXBwrajE8oTTiOWUvjleeOKn6f7ZlTDgCtXloyN1mFBPGvaDNq489M=
+  - secure: li/TzCODjpkhhq4DQYSYIVmxLlRD8wwHERzh59Aa/tGFUn8TcYMaOAbFlgIffuXdHjooEnYZKQzpohDQif3RjJmtkU9d6A43/tLoZIDlDZrxHXcCx4BYXOuESdyKNyIrCInvey5mXPaAx/9rz/enJkgFENPNEbFBsc87AcdtUQSlBDDA1vEEMgddQhhPsPR06M1gd7RKxjyi3jKJEEgpjAkEwbMVl+e3SJLjwwZYi9uInfDo9UdF0q+5Ftv6fIE/VBQXUtadksBu/2wlPSH+QOB85Xox5iZvrqZgL22yCTO5NHqjk+gVBIUGaiBMMN2Yogtk1LKhI9o/M5wK735q7L2EIVlQddlcgYcz/Fn2IQ3zsJ9mk0q2KmaXIHkEvvNkfXNcHOGLHkyJGwDsXC7ujYrhZTg9nFq/fT7tbIr5SazkPrKGy9QWLDj+dcfxvJY+qHp1rc8xwGBeOAfBRvApvlpOyZwu+gBRkNE0HWmL53h2AIpNzK3xPNAG1wjReIFHsj168tVtrPP6syGlnnipcPZV+nk5noJ49wrKNOlx8h1/6aS4hDKHlOlD+tH3kAere8STa3FBuPWkGWc1m9ybvTQ4/O294h506n1/dsg4i7gUnJPlOoGPvpFo27Ne1CyvEagIvuhQOzsYvbcZ7QYRyMdjnQtEAuyGna0oM28g5nA=
+deploy:
+  provider: releases
+  api_key:
+    secure: Elq/UBlPp6tnofM6d5XP8VV1JCcuQv1pRZdQBHLzf22TSwkqdxbok20BPuu3zPp0EU+RqfN04uy8PBjSWgyiMGFswe9WweL9obX39OWCR9BobB1rBW/Bi/aIJCyUKu35wYw6vdrhaVJ00MQYZRLvB6Q9YNsWukoadSzMzuC4P3i8+lLojGmBViZNeRtt6WG6C+ahfCijrWIVn589id7h6OgT6Y4f8b6DHN9Cj82PBpWbEFuPcByFvj/ZoTw6NHyY6RWun5xTFkaPiyVBgcC353yLQlv2lW6WWdJ1LydtW9dWkRoAxzLu0E0e3U8xX3tR57g7gj/UgHW5cCfj1ersm5K2tO/0pPCVH9yXSY76KU/KyG2DUThhWSkE9dio7gI6fTR7kyCMtuZZzphlv5UoFiKOYltGxoJdYkjSQj5Seqc6h0m7Pi6H6l0Fr/V8ovG4TXPTaz2/3G/GWrDRoJ4k282/3EAZHOP1LvMGR8nJbWTd+0C148atC0qRWkbp/1I7Cejojf4igo5mfQtBXI+NXXDDMd3h15VfhiJ9+tCmITbv7Tufg7K0OmHsK9fpFfg2CWTX5nGJS6BPLmLMJcuzMKh+z2nW/MvUyqhCYLjIQteZXFPZ/8wcbIzLVkcNZZ+YdbMvdzRTKTw7RZa/meEidUgAp/ho3ESc+B8fZMo7nS4=
+  file: 
+    - build/dist/*.jar
+    - build/dist/*.xml
+  file_glob: true
+  on:
+    tags: true
