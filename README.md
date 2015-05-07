@@ -28,11 +28,12 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 ### How is the domain picked?
 
 The plugin will pick a domain in the following order:
-1. Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE` (i.e. `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew build`)
-2. Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set and the commit has a tag. (No commit #s or hash are appended in this case)
-3. Passed in by the user as a parameter to `flexVersion()`.  **This method is very discouraged because it will cause merge conflicts and isn't deterministic**
-4. Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
-5. The value `unspecified`
+
+1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE` (i.e. `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew build`)
+2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set and the commit has a tag. (No commit #s or hash are appended in this case)
+3.  Passed in by the user as a parameter to `flexVersion()`.  **This method is very discouraged because it will cause merge conflicts and isn't deterministic**
+4.  Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
+5.  The value `unspecified`
 
 # LICENSE
 
