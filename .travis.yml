@@ -1,0 +1,8 @@
+language: java
+jdk:
+  - 'oraclejdk7'
+cache:
+  directories:
+    - ".gradle"
+script: 
+  - "./gradlew build --stacktrace"
