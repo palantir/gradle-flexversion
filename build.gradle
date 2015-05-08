@@ -34,14 +34,15 @@ publishing {
   }
   repositories {
     maven {
-      url "$buildDir/dist/"
+      url "$buildDir/localpublish/"
     }
   }
 }
 
 task zipPublish (type: Zip) {
-  from ("${buildDir}/dist/${project.group.replaceAll(/\./,'/')}/${project.name}") {
+  from ("${buildDir}/localpublish") {
     include '**/*'
+    exclude '**/maven-metadata.xml*'
   }
   appendix = "release"
   destinationDir = file("${project.buildDir}/artifacts")
