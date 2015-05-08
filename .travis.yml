@@ -1,16 +1,16 @@
 language: java
 jdk:
-  - 'oraclejdk7'
+- oraclejdk7
 cache:
   directories:
-    - ".gradle"
+  - ".gradle"
 script:
-  - "./gradlew build publish --stacktrace"
+- FLEX_VERSION_USE_TAG=set ./gradlew build publish --stacktrace
 deploy:
   provider: releases
   api_key:
-    secure: Elq/UBlPp6tnofM6d5XP8VV1JCcuQv1pRZdQBHLzf22TSwkqdxbok20BPuu3zPp0EU+RqfN04uy8PBjSWgyiMGFswe9WweL9obX39OWCR9BobB1rBW/Bi/aIJCyUKu35wYw6vdrhaVJ00MQYZRLvB6Q9YNsWukoadSzMzuC4P3i8+lLojGmBViZNeRtt6WG6C+ahfCijrWIVn589id7h6OgT6Y4f8b6DHN9Cj82PBpWbEFuPcByFvj/ZoTw6NHyY6RWun5xTFkaPiyVBgcC353yLQlv2lW6WWdJ1LydtW9dWkRoAxzLu0E0e3U8xX3tR57g7gj/UgHW5cCfj1ersm5K2tO/0pPCVH9yXSY76KU/KyG2DUThhWSkE9dio7gI6fTR7kyCMtuZZzphlv5UoFiKOYltGxoJdYkjSQj5Seqc6h0m7Pi6H6l0Fr/V8ovG4TXPTaz2/3G/GWrDRoJ4k282/3EAZHOP1LvMGR8nJbWTd+0C148atC0qRWkbp/1I7Cejojf4igo5mfQtBXI+NXXDDMd3h15VfhiJ9+tCmITbv7Tufg7K0OmHsK9fpFfg2CWTX5nGJS6BPLmLMJcuzMKh+z2nW/MvUyqhCYLjIQteZXFPZ/8wcbIzLVkcNZZ+YdbMvdzRTKTw7RZa/meEidUgAp/ho3ESc+B8fZMo7nS4=
-  file: "build/artifacts/*"
+    secure: VfPbZdP6SYlhWqbm0RJN98lqaGNi4f1CTc8pGski5zPt+bKUiff7Ii3+FLGPAtkEhbBQu61o2tcUU5gAvtGIFq0S3VoLhw57HXJIdN5zC6lQUqAr9ODN7N7mJXSbX92XsomW+b24SMrT7zCEfTAIHSKSh8MG4RZLFRa5Y2xP+BzTCqoai0LHV0P465TOb+3mT3LYjeQ89UtmZbqPJnZxHnN9ma9mkZge8OFp+DrjLiQVoBsAV4TpruQaq9VDM86oJ6s8O+KyhLtYKicc4GW/gKHVl4uhyJ2tEbRvqTYPVOw1fhN1VC/qxk2tYwfdgz1FLKcax/v+Lo29Qx6PqqLjGAzU5jRbWDgVOHzfti1gyZqQ+jl2aFfyXE+xx+xfLyc4uMtZCuIVByy4xZBUGlpQlHR1iW6Y87Ooa8GPagvtBcdncLf8y6kQIBANxxhsu1+mqlEIVN7Su3LzWeFU02x8j8w5D0Ng62WnAGqp55zyBpfmfH//8r0ymu8bBhcSmsByTHn3nvbbVv1cehY1dJ3BcmF7VAuC1gT3Xg1Q8OdyRkdfeRwDY/aK9cSXYk90Znn7ywlZOzpcO+LMtO8nrCK/AtexvEOyz7pTs2VKNq1HITpQ3lEEpiEilDXPeqYadlopyoaV2+DK3dgktwHJoc4o6izexCxYdSPXXnQopqjwjw0=
+  file: build/artifacts/*
   file_glob: true
   on:
     tags: true

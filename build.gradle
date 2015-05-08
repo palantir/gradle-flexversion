@@ -4,11 +4,20 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-group="com.palantir"
-version="0.1.5"
-
 repositories {
   mavenCentral()
+}
+
+buildscript {
+  repositories {
+    maven {
+        url "http://dl.bintray.com/palantir/maven"
+    }
+    mavenCentral()
+  }
+  dependencies {
+    classpath "com.palantir:gradle-flexversion:0.1.5"
+  }
 }
 
 dependencies {
@@ -16,6 +25,11 @@ dependencies {
   compile localGroovy()
   compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
 }
+
+apply plugin: 'gradle-flexversion'
+
+group "com.palantir"
+version flexVersion()
 
 task sourceJar(type: Jar) {
       from sourceSets.main.allSource
