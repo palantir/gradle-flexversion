@@ -13,17 +13,19 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 
 ## Using it in Gradle
 
-	buildscript {
-		repositories {
-	 		// Bintray
-	 	}
-	}
-	dependencies {
-		classpath 'com.palantir:gradle-flexversion:0.1.0'
-	}
-	
-	apply plugin: 'gradle-flexversion'
-	version flexVersion()
+  buildscript {
+    repositories {
+      maven {
+         url "http://dl.bintray.com/palantir/maven"
+       }
+    }
+    dependencies {
+      classpath 'com.palantir:gradle-flexversion:0.2.0'
+    }
+  }
+  
+  apply plugin: 'gradle-flexversion'
+  version flexVersion()
 	
 ### How is the domain picked?
 
