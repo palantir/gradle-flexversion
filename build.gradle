@@ -38,3 +38,16 @@ publishing {
     }
   }
 }
+
+task zipPublish (type: Zip) {
+  from ("${buildDir}/dist/${project.group.replaceAll(/\./,'/')}/${project.name}") {
+    include '**/*'
+  }
+  appendix = "release"
+  destinationDir = file("${project.buildDir}/artifacts")
+}
+
+publish << {
+  file("${project.buildDir}/artifacts").mkdirs()
+  tasks.zipPublish.execute()
+}
