@@ -18,16 +18,18 @@ import org.gradle.api.Project;
 public class FlexVersionConvention {
 
     private Project project;
+    private FlexVersionExtension extension;
 
-    public FlexVersionConvention(Project project) {
+    public FlexVersionConvention(Project project, FlexVersionExtension extension) {
         this.project = project;
+        this.extension = extension;
     }
 
     public String flexVersion() {
-        return FlexVersionPlugin.buildFlexVersion(project, null);
+        return FlexVersionPlugin.buildFlexVersion(project, null, extension);
     }
 
     public String flexVersion(String userDomain) {
-        return FlexVersionPlugin.buildFlexVersion(project, userDomain);
+        return FlexVersionPlugin.buildFlexVersion(project, userDomain, extension);
     }
 }
