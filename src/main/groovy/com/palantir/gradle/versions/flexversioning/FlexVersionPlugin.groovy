@@ -32,6 +32,8 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
+
 class FlexVersionPlugin implements Plugin<Project> {
 
     public static final String GROUP = "Flex Versioning";
@@ -40,11 +42,13 @@ class FlexVersionPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        FlexVersionConvention convention = new FlexVersionConvention(project);
+        FlexVersionExtension extension = new FlexVersionExtension();
+        FlexVersionConvention convention = new FlexVersionConvention(project, extension)
         project.getConvention().getPlugins().put("flexversion", convention);
+        project.getExtensions().add("flexversion", extension);
     }
 
-    public static String buildFlexVersion(Project project, String userDomain) {
+    public static String buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
         Repository repo = getRepo(project);
 
         RevWalk walk = new RevWalk(repo);
@@ -80,6 +84,20 @@ class FlexVersionPlugin implements Plugin<Project> {
         }
 
 
+        // Check passed in environment variable list
+        String envvarDomain = null;
+        for (ev in flexExtension.envvarSources) {
+            if (System.env[ev] != null) {
+                envvarDomain = System.env[ev];
+                for (s in flexExtension.stripRefs) {
+                    if (envvarDomain.startsWith(s)) {
+                        envvarDomain = envvarDomain.substring(s.length())
+                    }
+                }
+            }
+        }
+
+
         // Dirty bit
         String dirty = Git.wrap(repo).status().call().isClean() ? "" : "-dirty";
 
@@ -89,8 +107,9 @@ class FlexVersionPlugin implements Plugin<Project> {
          * 1. Set by environment variable
          * 2. Set by tag iff an environment variable is set and the tag is on the HEAD commit
          * 3. Passed in by the user
-         * 4. Symbolic ref of HEAD
-         * 5. unspecified
+         * 4. Contained in an environment variable from the list in the FlexVersion extension
+         * 5. Symbolic ref of HEAD
+         * 6. unspecified
          */
         String domain = "unspecified";
         if (System.env[DOMAIN_OVERRIDE_PROPERTY] != null) {
@@ -100,6 +119,8 @@ class FlexVersionPlugin implements Plugin<Project> {
             return "${domain}${dirty}";
         } else if (userDomain != null && !userDomain.trim().isEmpty()) {
             domain = userDomain.trim();
+        } else if (envvarDomain != null) {
+            domain = envvarDomain;
         } else if (headRef.isSymbolic()){
             String targetName = headRef.getTarget().getName();
             if (targetName.startsWith("refs/heads/")) {
