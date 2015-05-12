@@ -34,8 +34,22 @@ The plugin will pick a domain in the following order:
 1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE` (i.e. `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew build`)
 2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set and the commit has a tag. (No commit #s or hash are appended in this case)
 3.  Passed in by the user as a parameter to `flexVersion()`.  **This method is very discouraged because it will cause merge conflicts and isn't deterministic**
-4.  Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
-5.  The value `unspecified`
+4.  Check the `flexversion` extension's `envvarSources` list of environment variables that may contain the branch name (useful for build infrastructure that may run in detached HEAD mode)
+5.  Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
+6.  The value `unspecified`
+
+### The extension
+
+If this plugin is used in some kind of automated build infrastructure, it is useful to use the extension to let the plugin know where branch information might be.
+
+If your build infrastructure can have branch information at `GIT_BRANCH` or `BRANCH` and the first option is the higher priority option, then the extension could be set up:
+
+  flexversion {
+    envvarSources << "GIT_BRANCH" << "BRANCH"
+  }
+
+There is also a `stripRefs` property that is a list of strings that is stripped off the beginning of a branch made in these environment variables.  The default values are `refs/tags/`, `refs/heads/`, and `origin/`.
+
 
 # LICENSE
 
