@@ -11,12 +11,12 @@ repositories {
 buildscript {
   repositories {
     maven {
-        url "http://dl.bintray.com/palantir/maven"
+        url "http://dl.bintray.com/palantir/releases"
     }
     mavenCentral()
   }
   dependencies {
-    classpath "com.palantir:gradle-flexversion:0.1.5"
+    classpath "com.palantir:gradle-flexversion:0.2.0"
   }
 }
 

@@ -15,13 +15,15 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 
 	buildscript {
 		repositories {
-	 		// Bintray
-	 	}
+			maven {
+				url "http://dl.bintray.com/palantir/releases"
+			}
+		}
+		dependencies {
+			classpath 'com.palantir:gradle-flexversion:0.2.0'
+		}
 	}
-	dependencies {
-		classpath 'com.palantir:gradle-flexversion:0.1.0'
-	}
-	
+
 	apply plugin: 'gradle-flexversion'
 	version flexVersion()
 	
