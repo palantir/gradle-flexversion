@@ -113,11 +113,12 @@ class FlexVersionPlugin implements Plugin<Project> {
          * 6. unspecified
          */
         String domain = "unspecified";
+        boolean tag = false;
         if (System.env[DOMAIN_OVERRIDE_PROPERTY] != null) {
             domain = System.env[DOMAIN_OVERRIDE_PROPERTY];
         } else if (System.env[DOMAIN_TAG_PROPERTY] != null && domainIfTag != null) {
             domain = domainIfTag;
-            return "${domain}${dirty}";
+            tag = true;
         } else if (envvarDomain != null) {
             domain = envvarDomain;
         } else if (userDomain != null && !userDomain.trim().isEmpty()) {
@@ -128,6 +129,19 @@ class FlexVersionPlugin implements Plugin<Project> {
                 targetName = targetName.substring("refs/heads/".length());
             }
             domain = targetName.replaceAll("/", "-");
+        }
+
+
+        // Check if the domain matches the required pattern
+        if (flexExtension.domainPattern != null) {
+            if (!(flexExtension.domainPattern.matcher(domain).matches())) {
+                throw new Exception("Domain [${domain}] does not match the required pattern ${flexExtension.domainPattern}.");
+            }
+        }
+
+
+        if (tag) {
+            return "${domain}${dirty}"
         }
 
         return "${domain}-${commitCount}-g${headSha1.substring(0,12)}${dirty}";

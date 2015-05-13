@@ -46,15 +46,22 @@ If your build infrastructure has a HEAD value set, then Flex Version will just w
 In this example, we assume we have two build infrastructures.  The first is using some kind of Gerrit plugin that sets the branch in `GERRIT_BRANCH` with the form `gerrit/BRANCHNAME`.  The second is Bamboo and we assume it sets the environment variable `BAMBOO_REPO_BRANCH`.
 
 
-	apply plugin: 'gradle-flexversion'
-	version flexVersion()
-	
 	flexversion {
 		envvarSources << "GERRIT_BRANCH" << "BAMBOO_REPO_BRANCH"
 		stripRefs << "gerrit/"
 	}
 
 Flex Version will first check for `FLEX_VERSION_DOMAIN_OVERRIDE`, the tag condition, and then the environment variables `GERRIT_BRANCH` and `BAMBOO_REPO_BRANCH` for a branch value.  If it finds it in one of the environment variables we passed in, it will strip off the `gerrit/` at the beginning.  The property `stripRefs` has a default value of `["refs/tags/", refs/heads/", "origin/"]`.  The order values to `envvarSources` is also the order of priority (decreasing).  It will pick the first one it finds.
+
+## Enforcing certain domains
+
+While Flex Versioning is all about allowing almost any domain, it still provides a way to enforce a pattern.  There is an extra property in the `flexversion` closure that will take a Java/Groovy Pattern and enforce that the domain matches it.  For example, semver.org Version 2 can be matched with `~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/`.
+
+	flexversion {
+		domainPattern = ~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/
+	}
+
+Before returning the version string, if the found domain doesn't match that lovely pattern, it will fail the build.
 
 # LICENSE
 
