@@ -33,6 +33,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
+import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
 class FlexVersionPlugin implements Plugin<Project> {
 
@@ -46,9 +47,11 @@ class FlexVersionPlugin implements Plugin<Project> {
         FlexVersionConvention convention = new FlexVersionConvention(project, extension);
         project.getConvention().getPlugins().put("flexversion", convention);
         project.getExtensions().add("flexversion", extension);
+
+        project.getTasks().create("printVersion", PrintVersionTask.class);
     }
 
-    public static String buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
+    static String buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
         Repository repo = getRepo(project);
 
         RevWalk walk = new RevWalk(repo);
