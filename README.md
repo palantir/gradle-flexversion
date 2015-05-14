@@ -21,7 +21,7 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 			mavenCentral()
 		}
 		dependencies {
-			classpath 'com.palantir:gradle-flexversion:0.2.0'
+			classpath 'com.palantir:gradle-flexversion:0.3.0'
 		}
 	}
 
