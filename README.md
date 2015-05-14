@@ -51,7 +51,7 @@ In this example, we assume we have two build infrastructures.  The first is usin
 		stripRefs << "gerrit/"
 	}
 
-Flex Version will first check for `FLEX_VERSION_DOMAIN_OVERRIDE`, the tag condition, and then the environment variables `GERRIT_BRANCH` and `BAMBOO_REPO_BRANCH` for a branch value.  If it finds it in one of the environment variables we passed in, it will strip off the `gerrit/` at the beginning.  The property `stripRefs` has a default value of `["refs/tags/", refs/heads/", "origin/"]`.  The order values to `envvarSources` is also the order of priority (decreasing).  It will pick the first one it finds.
+Flex Version will first check for `FLEX_VERSION_DOMAIN_OVERRIDE`, the tag condition, and then the environment variables `GERRIT_BRANCH` and `BAMBOO_REPO_BRANCH` for a branch value.  After finding a branch, it will strip off the prefixes in the `stripRefs` list.  The property `stripRefs` has a default value of `["refs/tags/", refs/heads/", "origin/"]`.  The order of values to `envvarSources` is also the order of priority (decreasing).  It will pick the first one it finds.
 
 ## Enforcing certain domains
 
