@@ -34,32 +34,32 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 
 By default, Flex Version will use the name of the current branch.  If there is no branch, the value `unspecified` will be used.  In this example, any commit without a tag will have a version like `BRANCHNAME-$N-g$X` and if a commit has a tag, it will just be `TAGNAME`.
 
-  apply plugin: 'gradle-flexversion'
-  flexversion {
-    useTags = true
-  }
-  version flexVersion()
+	apply plugin: 'gradle-flexversion'
+		flexversion {
+		useTags = true
+	}
+	version flexVersion()
 
 ### Let me use this in my Build Infrastructure w/o a dedicated release build
 
 In this example, Flex Version is being used in a build infrastructure with one build.  It is similar to the above example.  However, in this case, our infrastructure may build things in a headless state and it provides the branch name in an environment variable called `GIT_BRANCH`.
 
-  apply plugin: 'gradle-flexversion'
-  flexversion {
-    useTags = true
-    envvarSources << "GIT_BRANCH"
-  }
-  version flexVersion()
+	apply plugin: 'gradle-flexversion'
+	flexversion {
+		useTags = true
+		envvarSources << "GIT_BRANCH"
+	}
+	version flexVersion()
 
 ### OK cool, but I want to have a dedicated release build!
 
 That's no problem.  Use the environment variable for tags instead of the property.
 
-  apply plugin: 'gradle-flexversion'
-  flexversion {
-    envvarSources << "GIT_BRANCH"
-  }
-  version flexVersion()
+	apply plugin: 'gradle-flexversion'
+	flexversion {
+		envvarSources << "GIT_BRANCH"
+	}
+	version flexVersion()
 
 Then, in the build you want to handle building releases (or clean versions), run your gradle command with the environment variable set.  For example, you could run `$ FLEX_VERSION_USE_TAG=set ./gradlew publish`.  This would keep the standard build publishing the `DOMAIN-$N-g$H` pattern and the release publishing the clean tag format.
 
@@ -67,8 +67,8 @@ Then, in the build you want to handle building releases (or clean versions), run
 
 You can do that too.  Just pass in a value.  In this example, we have a `version.txt` file that only contains the domain we want.
 
-  apply plugin: 'gradle-flexversion'
-  version flexVersion(file("version.txt").text.trim())
+	apply plugin: 'gradle-flexversion'
+	version flexVersion(file("version.txt").text.trim())
 
 The thing to be aware of here is that after a git merge, check the value of the file to make sure it's what you want it to be.
 
@@ -99,9 +99,9 @@ The plugin will pick a domain in the following order:
 
 If you're pulling in the branch name via environment variable, the build infrastructure may be adding something like `origin/` or `refs/tags/` on it.  To strip off any prefixes, make use of the `stripRefs` property.  By default, it's value is `["refs/tags/", "refs/heads/", "origin/"]`.
 
-  flexversion {
-    stripRefs << "gerrit/"
-  }
+	flexversion {
+		stripRefs << "gerrit/"
+	}
 
 The property `stripRefs` is used to strip off any prefix from a domain that was determined via the `envvarSources` property.
 
