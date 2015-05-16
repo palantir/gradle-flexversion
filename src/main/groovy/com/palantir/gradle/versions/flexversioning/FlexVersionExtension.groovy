@@ -1,8 +1,10 @@
 package com.palantir.gradle.versions.flexversioning
 
+import java.util.regex.Pattern
+
 class FlexVersionExtension {
     List envvarSources = [];
     List stripRefs = ["refs/tags/", "refs/heads/", "origin/"];
-    java.util.regex.Pattern domainPattern = null;
+    Pattern domainPattern = null;
     boolean useTags = false;
 }
