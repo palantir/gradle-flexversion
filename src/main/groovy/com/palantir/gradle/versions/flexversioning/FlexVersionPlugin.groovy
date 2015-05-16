@@ -119,7 +119,7 @@ class FlexVersionPlugin implements Plugin<Project> {
         boolean tag = false;
         if (System.env[DOMAIN_OVERRIDE_PROPERTY] != null) {
             domain = System.env[DOMAIN_OVERRIDE_PROPERTY];
-        } else if (System.env[DOMAIN_TAG_PROPERTY] != null && domainIfTag != null) {
+        } else if ((System.env[DOMAIN_TAG_PROPERTY] != null || flexExtension.useTags) && domainIfTag != null) {
             domain = domainIfTag;
             tag = true;
         } else if (envvarDomain != null) {
