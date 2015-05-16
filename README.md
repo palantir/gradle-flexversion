@@ -112,6 +112,11 @@ The property `stripRefs` is used to strip off any prefix from a domain that was 
 *  `domainPattern` - Before returning the version, check that the domain matches this Pattern.  Default is none.
 *  `useTags` - If true and the commit being built has a tag on it, the version returned will be the tag's value.  Default is `false`.
 
+### All the environment variables
+
+*  `FLEX_VERSION_DOMAIN_OVERRIDE` - If this is set, this becomes the domain.  No matter what the other properties and variables are set to.
+*  `FLEX_VERSION_USE_TAG` - If this is set and the commit being built has a tag on it, the version returned will be the tag's value.
+
 # LICENSE
 
 Gradle Flex Version is released by Palantir Technologies, Inc. under the Apache 2.0 License. see the included LICENSE file for details.
