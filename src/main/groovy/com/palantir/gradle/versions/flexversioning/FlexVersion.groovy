@@ -30,20 +30,22 @@ class FlexVersion {
         this.tag = tag;
         this.dirty = dirty;
 
-        String dirtyBit = this.dirty ? "-dirty" : "";
+        if (this.gitHash.length() > 12) {
+            this.gitHash = this.gitHash.substring(0, 12);
+        }
 
         if (this.tag) {
-            this.fullVersion = "${this.domain}${dirtyBit}"
+            this.fullVersion = "${this.domain}"
         } else {
-            this.fullVersion = "${this.domain}-${this.commitCount}-g${this.gitHash.substring(0,12)}${dirty}";
+            this.fullVersion = "${this.domain}-${this.commitCount}-g${this.gitHash}";
+        }
+
+        if (this.dirty) {
+            this.fullVersion = "${this.fullVersion}-dirty";
         }
     }
 
     public String toString() {
         return this.fullVersion;
-    }
-
-    public String shortGitHash() {
-        return this.gitHash.substring(0,12);
     }
 }
