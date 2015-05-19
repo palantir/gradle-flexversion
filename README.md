@@ -13,26 +13,28 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 
 ## Adding it to Gradle
 
-	buildscript {
-		repositories {
-			maven {
-				url "http://dl.bintray.com/palantir/releases"
-			}
-			mavenCentral()
+```gradle
+buildscript {
+	repositories {
+		maven {
+			url "http://dl.bintray.com/palantir/releases"
 		}
-		dependencies {
-			classpath 'com.palantir:gradle-flexversion:0.3.0'
-		}
+		mavenCentral()
 	}
+	dependencies {
+		classpath 'com.palantir:gradle-flexversion:0.3.0'
+	}
+}
+```
 
-	apply plugin: 'gradle-flexversion'
-	version flexVersion()
+apply plugin: 'gradle-flexversion'
+version flexVersion()
 
 ## Basic Usage
 
 ### Versioning using the branch name and tags for releases
 
-The default usage of Flex Versions picks the branch name as the domain.  If the `useTags` property is set to true and the HEAD commit has a tag on it, the version will be the tag name.  If there are any `/` characters in the branch name, they are converted to `-`
+The default usage of Flex Versions picks the branch name as the domain.  If the `useTags` property is set to true and the HEAD commit has a tag on it, the version will be the tag name.  If there are any `/` characters in the branch name, they are converted to `-`.
 
 The `build.gradle` file has the following set up for versioning:
 
@@ -96,7 +98,7 @@ flexVersion {
 ```
 
 * `envvarSources` - A list of environment variables to check for domain values (uses the first one it finds).  Defaults to `[]`.
-* `stripRefs` - A list of prefixes to remove from the domain (before `/` are converted to `-`) found via `envvarSources`.  It will strip all the prefixes it finds.  Default is `["refs/tags/", "refs/heads/", "origin"]`
+* `stripRefs` - A list of prefixes to remove from the domain (before `/` are converted to `-`) found via `envvarSources`.  It will strip all the prefixes it finds.  Default is `["refs/tags/", "refs/heads/", "origin/"]`
 * `domainPattern` - Before returning the version, check the the domain matches this Pattern.  Default is `null`.
 * `useTags` - If true and the commit being build has a tag on it, the version returned will be the tag's value.  Default is `false`.
 
