@@ -76,7 +76,7 @@ We can use the included `printVersion` task the plugin adds to see what the vers
 user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
 b7feb2b69d01d39648031a60d8bb473f094437d3 Add environment variables in the README as well
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
-2.3.0-dev-59-59-b7feb2b69d01
+2.3.0-dev-59-b7feb2b69d01
 user:~/git/flexversions-example (develop) $ git tag 2.3.0 b7feb2b69d01 # Let's tag the current commit
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 2.3.0
