@@ -15,21 +15,35 @@ package com.palantir.gradle.versions.flexversioning
 
 class FlexVersion {
     String domain = null;
-    String commitCount = null;
     String gitHash = null;
     String fullVersion = null;
+
+    int commitCount = -1;
 
     boolean dirty = false;
     boolean tag = false;
 
-    public FlexVersion (String domain, String commitCount, String gitHash, boolean dirty) {
+    public FlexVersion (String domain, int commitCount, String gitHash, boolean tag, boolean dirty) {
         this.domain = domain;
         this.commitCount = commitCount;
         this.gitHash = gitHash;
+        this.tag = tag;
         this.dirty = dirty;
+
+        String dirtyBit = this.dirty ? "-dirty" : "";
+
+        if (this.tag) {
+            this.fullVersion = "${this.domain}${dirtyBit}"
+        } else {
+            this.fullVersion = "${this.domain}-${this.commitCount}-g${this.gitHash.substring(0,12)}${dirty}";
+        }
     }
 
     public String toString() {
         return this.fullVersion;
+    }
+
+    public String shortGitHash() {
+        return this.gitHash.substring(0,12);
     }
 }

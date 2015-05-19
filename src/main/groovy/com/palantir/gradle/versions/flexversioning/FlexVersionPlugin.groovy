@@ -71,7 +71,7 @@ class FlexVersionPlugin implements Plugin<Project> {
 
 
         // Count commits
-        String commitCount = RevWalkUtils.count(walk, headCommit, firstCommit).toString();
+        int commitCount = RevWalkUtils.count(walk, headCommit, firstCommit);
 
 
         // Find if there is a tag on the HEAD commit.
@@ -144,16 +144,7 @@ class FlexVersionPlugin implements Plugin<Project> {
             }
         }
 
-        FlexVersion version = new FlexVersion(domain, commitCount, headSha1.substring(0,12), isDirty);
-
-        if (tag) {
-            version.tag = true;
-            version.fullVersion = "${domain}${dirty}";
-        } else {
-            version.fullVersion = "${domain}-${commitCount}-g${headSha1.substring(0,12)}${dirty}";
-        }
-
-        return version
+        return new FlexVersion(domain, commitCount, headSha1, isDirty, tag);
     }
 
     private static Repository getRepo(Project project) {
