@@ -28,94 +28,117 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 	apply plugin: 'gradle-flexversion'
 	version flexVersion()
 
-## Using it
+## Basic Usage
 
-### Let me just use this locally to build and make tags clean
+### Versioning using the branch name and tags for releases
 
-By default, Flex Version will use the name of the current branch.  If there is no branch, the value `unspecified` will be used.  In this example, any commit without a tag will have a version like `BRANCHNAME-$N-g$X` and if a commit has a tag, it will just be `TAGNAME`.
+The default usage of Flex Versions picks the branch name as the domain.  If the `useTags` property is set to true and the HEAD commit has a tag on it, the version will be the tag name.  If there are any `/` characters in the branch name, they are converted to `-`
 
-	apply plugin: 'gradle-flexversion'
-		flexversion {
-		useTags = true
-	}
-	version flexVersion()
+The `build.gradle` file has the following set up for versioning:
 
-### Let me use this in my Build Infrastructure w/o a dedicated release build
+```gradle
+apply plugin: 'gradle-flexversion'
+flexversion {
+	useTags = true
+}
+version flexVersion()
+```
 
-In this example, Flex Version is being used in a build infrastructure with one build.  It is similar to the above example.  However, in this case, our infrastructure may build things in a headless state and it provides the branch name in an environment variable called `GIT_BRANCH`.
+We can use the included `printVersion` task the plugin adds to see what the version is.
 
-	apply plugin: 'gradle-flexversion'
-	flexversion {
-		useTags = true
-		envvarSources << "GIT_BRANCH"
-	}
-	version flexVersion()
+```console
+user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
+b7feb2b69d01d39648031a60d8bb473f094437d3 Add environment variables in the README as well
+user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
+develop-59-b7feb2b69d01
+user:~/git/flexversions-example (develop) $ git tag 0.1.0 b7feb2b69d01 # Let's tag the current commit
+user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
+0.1.0
+```
 
-### OK cool, but I want to have a dedicated release build!
+### Versioning using a user-defined domain and tags for releases
 
-That's no problem.  Use the environment variable for tags instead of the property.
+If you don't wish to use the branch name as the domain, `flexVersion()` will also accept a string for the domain.
 
-	apply plugin: 'gradle-flexversion'
-	flexversion {
-		envvarSources << "GIT_BRANCH"
-	}
-	version flexVersion()
+The `build.gradle` file has the following set up for versioning:
 
-Then, in the build you want to handle building releases (or clean versions), run your gradle command with the environment variable set.  For example, you could run `$ FLEX_VERSION_USE_TAG=set ./gradlew publish`.  This would keep the standard build publishing the `DOMAIN-$N-g$H` pattern and the release publishing the clean tag format.
+```gradle
+apply plugin: 'gradle-flexversion'
+flexversion {
+	useTags = true
+}
+version flexVersion("2.3.0-dev")
+```
 
-### I want my domain to be a number without changing my branch name
+We can use the included `printVersion` task the plugin adds to see what the version is.
 
-You can do that too.  Just pass in a value.  In this example, we have a `version.txt` file that only contains the domain we want.
+```console
+user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
+b7feb2b69d01d39648031a60d8bb473f094437d3 Add environment variables in the README as well
+user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
+2.3.0-dev-59-59-b7feb2b69d01
+user:~/git/flexversions-example (develop) $ git tag 2.3.0 b7feb2b69d01 # Let's tag the current commit
+user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
+2.3.0
+```
 
-	apply plugin: 'gradle-flexversion'
-	version flexVersion(file("version.txt").text.trim())
+## Closure properties and variables
 
-The thing to be aware of here is that after a git merge, check the value of the file to make sure it's what you want it to be.
+There is a `flexVersion` closure for setting up the plugin.  Below are the properties in the closure with examples of using each.
+
+```gradle
+flexVersion {
+	envvarSources << "GIT_BRANCH" << "GERRIT_BRANCH"
+	stripRefs << "myremote/"
+	domainPattern = ~/\d+\.\d+\.\d/
+	useTags = true
+}
+```
+
+* `envvarSources` - A list of environment variables to check for domain values (uses the first one it finds).  Defaults to `[]`.
+* `stripRefs` - A list of prefixes to remove from the domain (before `/` are converted to `-`) found via `envvarSources`.  It will strip all the prefixes it finds.  Default is `["refs/tags/", "refs/heads/", "origin"]`
+* `domainPattern` - Before returning the version, check the the domain matches this Pattern.  Default is `null`.
+* `useTags` - If true and the commit being build has a tag on it, the version returned will be the tag's value.  Default is `false`.
+
+There are some environment variables as well:
+
+* `FLEX_VERSION_DOMAIN_OVERRIDE` - This environment variable completely hijacks the domain picking logic.  If this variable is set, the domain becomes the value no matter the state of the repo or build script.
+* `FLEX_VERSION_USE_TAG` - If this is set and the commit being built has a tag on it, the version returned will be the tag's value.  (This works the same as the property `useTags`)
 
 ## Advanced
 
-### Enforcing domains to have a format
-
-While Flex Versioning is all about allowing almost any domain, it still provides a way to enforce a pattern.  There is an extra property in the `flexversion` closure that will take a Java/Groovy Pattern and enforce that the domain matches it.  For example, semver.org Version 2 can be matched with `~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/`.
-
-	flexversion {
-		domainPattern = ~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/
-	}
-
-Before returning the version string, if the found domain doesn't match that lovely pattern, it will fail the build.
-
-### How is the domain picked?
+### How is a domain picked?
 
 The plugin will pick a domain in the following order:
 
-1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE` (i.e. `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew build`)
-2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set or the property `useTags` is `true` and the commit has a tag. (No commit #s or hash are appended in this case)
-3.  Environment variable from a user provided list in the `flexversion` extension's property `envvarSources`.
-3.  Passed in by the user as a parameter to `flexVersion()`.
-4.  Read the symbolic ref of HEAD (This is great because it will basically use the local branch name)
-5.  The value `unspecified`
+1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE`. (example: `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew publish`)
+2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set or the property `useTags` is `true` and the commit has a tag.  **No commit counts or git hash are appended in this case**
+3.  Environment variable from a user-provided list in the `flexVersion` closure property `envvarSources`
+4.  Passed in by the user as a parameter to `flexVersion()`
+5.  Reading the symbolic ref of HEAD (This will basically use the local branch name)
+6.  The value `unspecified`
 
-### My domain has origin- or some other extra prefix on it
+After the domain is picked, all `/` characters are converted to `-`.  If the current state of the repo isn't clean, `-dirty` is appended at the end of the version.  (This is true even in the tags case).
 
-If you're pulling in the branch name via environment variable, the build infrastructure may be adding something like `origin/` or `refs/tags/` on it.  To strip off any prefixes, make use of the `stripRefs` property.  By default, it's value is `["refs/tags/", "refs/heads/", "origin/"]`.
+### The type `flexVersion()` returns
 
-	flexversion {
-		stripRefs << "gerrit/"
-	}
+**TODO**
 
-The property `stripRefs` is used to strip off any prefix from a domain that was determined via the `envvarSources` property.
+### Use Case: Enforcing domains to have a format
 
-### All the properties
+While Flex Versioning is all about allowing almost any domain, it still provides a way to enforce a pattern.  There is an extra property in the `flexversion` closure that will take a Java/Groovy Pattern and enforce that the domain matches it.  For example, semver.org Version 2 can be matched with `~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/`.
 
-*  `envvarSources` - A List of environment variables to check for domain values (uses the first one it finds).  Default is `[]`.
-*  `stripRefs` - A list of prefixes to remove from the domain found via `envvarSources`.  It will strip all the prefixes it finds.  Default is `["refs/tags/", "refs/heads/", "origin/"]`.
-*  `domainPattern` - Before returning the version, check that the domain matches this Pattern.  Default is none.
-*  `useTags` - If true and the commit being built has a tag on it, the version returned will be the tag's value.  Default is `false`.
+```gradle
+flexversion {
+	domainPattern = ~/([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))\.([0-9]|(?:[1-9]\d*))(?:\-([a-zA-Z1-9][a-zA-Z0-9-]*(?:\.[a-zA-Z1-9][a-zA-Z0-9-]*)*))?/
+}
+```
 
-### All the environment variables
+Before returning the version string, if the found domain doesn't match the given pattern, it will fail the build.
 
-*  `FLEX_VERSION_DOMAIN_OVERRIDE` - If this is set, this becomes the domain.  No matter what the other properties and variables are set to.
-*  `FLEX_VERSION_USE_TAG` - If this is set and the commit being built has a tag on it, the version returned will be the tag's value.
+### Use Case: Build script is running in a detached head environment
+
+**TODO**
 
 # LICENSE
 
