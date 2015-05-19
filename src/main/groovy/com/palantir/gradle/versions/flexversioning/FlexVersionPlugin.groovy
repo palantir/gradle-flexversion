@@ -129,12 +129,12 @@ class FlexVersionPlugin implements Plugin<Project> {
         } else if (userDomain != null && !userDomain.trim().isEmpty()) {
             domain = userDomain.trim();
         } else if (headRef.isSymbolic()){
-            String targetName = headRef.getTarget().getName();
-            if (targetName.startsWith("refs/heads/")) {
-                targetName = targetName.substring("refs/heads/".length());
+            domain = headRef.getTarget().getName();
+            if (domain.startsWith("refs/heads/")) {
+                domain = domain.substring("refs/heads/".length());
             }
-            domain = targetName.replaceAll("/", "-");
         }
+        domain = domain.replaceAll("/", "-");
 
 
         // Check if the domain matches the required pattern
@@ -144,7 +144,7 @@ class FlexVersionPlugin implements Plugin<Project> {
             }
         }
 
-        return new FlexVersion(domain, commitCount, headSha1, isDirty, tag);
+        return new FlexVersion(domain, commitCount, headSha1, tag, isDirty);
     }
 
     private static Repository getRepo(Project project) {
