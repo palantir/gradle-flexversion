@@ -25,11 +25,11 @@ public class FlexVersionConvention {
         this.extension = extension;
     }
 
-    public String flexVersion() {
+    public FlexVersion flexVersion() {
         return FlexVersionPlugin.buildFlexVersion(project, null, extension);
     }
 
-    public String flexVersion(String userDomain) {
+    public FlexVersion flexVersion(String userDomain) {
         return FlexVersionPlugin.buildFlexVersion(project, userDomain, extension);
     }
 }

@@ -12,6 +12,6 @@ class PrintVersionTask extends DefaultTask {
 
     @TaskAction
     public void printVersion() {
-        getProject().getLogger().log(LogLevel.QUIET, getProject().getVersion())
+        getProject().getLogger().log(LogLevel.QUIET, getProject().getVersion().toString())
     }
 }

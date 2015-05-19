@@ -32,6 +32,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+import com.palantir.gradle.versions.flexversioning.FlexVersion;
 import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
 import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
@@ -51,7 +52,7 @@ class FlexVersionPlugin implements Plugin<Project> {
         project.getTasks().create("printVersion", PrintVersionTask.class);
     }
 
-    static String buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
+    static FlexVersion buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
         Repository repo = getRepo(project);
 
         RevWalk walk = new RevWalk(repo);
@@ -103,7 +104,8 @@ class FlexVersionPlugin implements Plugin<Project> {
 
 
         // Dirty bit
-        String dirty = Git.wrap(repo).status().call().isClean() ? "" : "-dirty";
+        boolean isDirty = !Git.wrap(repo).status().call().isClean();
+        String dirty = isDirty ? "-dirty" : "";
 
 
         /*
@@ -142,12 +144,16 @@ class FlexVersionPlugin implements Plugin<Project> {
             }
         }
 
+        FlexVersion version = new FlexVersion(domain, commitCount, headSha1.substring(0,12), isDirty);
 
         if (tag) {
-            return "${domain}${dirty}"
+            version.tag = true;
+            version.fullVersion = "${domain}${dirty}";
+        } else {
+            version.fullVersion = "${domain}-${commitCount}-g${headSha1.substring(0,12)}${dirty}";
         }
 
-        return "${domain}-${commitCount}-g${headSha1.substring(0,12)}${dirty}";
+        return version
     }
 
     private static Repository getRepo(Project project) {
