@@ -1,0 +1,17 @@
+CHANGELOG
+
+0.4.0
+=======
+-Breaking: FlexVersion object now returned instead of string.
+    * If the return value of flexVersion() is used somewhere expecting a string, call toString()
+    * This gives the user the ability to pull pieces out of the version string without parsing it manually
+-Possible breaking: All domains (no matter how determined) will have / converted to -
+
+0.3.0
+=======
+-Custom environment variables (useful for build systems and environments where the workspace is in a detached head)
+-Option to enforce a pattern for a domain
+
+0.2.0
+=======
+-Initial release of flexversion
