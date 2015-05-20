@@ -84,6 +84,7 @@ user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 2.3.0
 ```
 
+<a name="closureproperties"></a>
 ## Closure properties and variables
 
 There is a `flexVersion` closure for setting up the plugin.  Below are the properties in the closure with examples of using each.
@@ -124,7 +125,21 @@ After the domain is picked, all `/` characters are converted to `-`.  If the cur
 
 ### The type `flexVersion()` returns
 
-**TODO**
+The `flexVersion` method does not return a `String` object.  It returns a `FlexVersion` object.  It can be used as a parameter for Gradle's `version`.  Making this an object allows for pulling out pieces of the version string for other uses (if desired).
+
+```groovy
+class FlexVesion {
+	String domain // The domain portion (or the tag value)
+	String gitHash // The git hash truncated to 12 characters
+	int commitCount // The number of commits in HEAD's history
+	boolean dirty // Is the dirty bit set?
+	boolean tag // Is the domain from a tag?
+	String fullVersion // The fully filled in version that Gradle would use
+	String toString() // Return fullVersion String
+}
+```
+
+Even though the `fullVersion` of a version using tags only has the tag value, the `FlexVersion` object returned will still have the `gitHash` and `commitCount` values set.
 
 ### Use Case: Enforcing domains to have a format
 
@@ -140,7 +155,30 @@ Before returning the version string, if the found domain doesn't match the given
 
 ### Use Case: Build script is running in a detached head environment
 
-**TODO**
+There are some build environments that may not have a local branch set.  If in these cases the value `unspecified` as the domain is not OK, the `envvarSources` property can be used if environment variables contain the required domains.  For example, we can assume that we run on our build system that triggers due to changes in a git repo.  For the sake of simplicity, the build system does a `git checkout GITHASH` leaving the local repo in a headless state.  The system provides an environment variable `GIT_BRANCH` with the value of the branch or tag.
+
+```gradle
+flexversion {
+	envvarSources << "GIT_BRANCH"
+}
+```
+
+If Flex Version finds that `GIT_BRANCH` is set, it will use its value as the domain.
+
+#### Stripping remote ref information
+
+If the environment variable provided by the build system (or other environment) contains some kind of remote name (example: `origin/`), `stripRefs` is used to remove those.
+
+Using our example above, if `GIT_BRANCH` value is `gerrit/master`, our domain will end up being `gerrit-master`.  To fix this:
+
+```gradle
+flexversion {
+	envvarSources << "GIT_BRANCH"
+	stripRefs << "gerrit/"
+}
+```
+
+See [closure properties](#closureproperties) above for the default value of `stripRefs`.
 
 # LICENSE
 
