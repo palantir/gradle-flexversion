@@ -5,7 +5,7 @@ cache:
   directories:
   - ".gradle"
 script:
-- FLEX_VERSION_USE_TAG=set ./gradlew build publish --stacktrace
+- ./gradlew build publish --stacktrace
 deploy:
   provider: releases
   api_key:

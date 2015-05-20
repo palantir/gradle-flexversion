@@ -16,7 +16,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "com.palantir:gradle-flexversion:0.2.0"
+    classpath "com.palantir:gradle-flexversion:0.4.0"
   }
 }
 
@@ -27,6 +27,10 @@ dependencies {
 }
 
 apply plugin: 'gradle-flexversion'
+
+flexVersion {
+  useTags = true
+}
 
 group "com.palantir"
 version flexVersion()
