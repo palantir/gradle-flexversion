@@ -32,4 +32,8 @@ public class FlexVersionConvention {
     public FlexVersion flexVersion(String userDomain) {
         return FlexVersionPlugin.buildFlexVersion(project, userDomain, extension);
     }
+
+    public void addPrintVersionTask() {
+        this.project.getTasks().create("printVersion", PrintVersionTask.class);
+    }
 }

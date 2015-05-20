@@ -8,6 +8,7 @@ class PrintVersionTask extends DefaultTask {
 
     public PrintVersionTask() {
         setDescription("Print the version of the project.")
+        setGroup(FlexVersionPlugin.GROUP);
     }
 
     @TaskAction

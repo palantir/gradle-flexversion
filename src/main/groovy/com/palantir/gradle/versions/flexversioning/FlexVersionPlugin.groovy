@@ -38,9 +38,10 @@ import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
 class FlexVersionPlugin implements Plugin<Project> {
 
-    public static final String GROUP = "Flex Versioning";
     private static final String DOMAIN_OVERRIDE_PROPERTY = "FLEX_VERSION_DOMAIN_OVERRIDE";
     private static final String DOMAIN_TAG_PROPERTY = "FLEX_VERSION_USE_TAG";
+
+    public static final String GROUP = "Flex Versioning";
 
     @Override
     public void apply(Project project) {
@@ -48,8 +49,6 @@ class FlexVersionPlugin implements Plugin<Project> {
         FlexVersionConvention convention = new FlexVersionConvention(project, extension);
         project.getConvention().getPlugins().put("flexversion", convention);
         project.getExtensions().add("flexversion", extension);
-
-        project.getTasks().create("printVersion", PrintVersionTask.class);
     }
 
     static FlexVersion buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
