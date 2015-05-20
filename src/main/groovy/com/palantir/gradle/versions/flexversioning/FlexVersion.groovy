@@ -13,6 +13,12 @@
 // limitations under the License.
 package com.palantir.gradle.versions.flexversioning
 
+/*
+ * POGO containing all the versioning information.  It can be used by the
+ * standard version property of Gradle.  In addition, the code can grab
+ * the individual portions of the constructed version without having to
+ * parse the resulting string.
+ */
 class FlexVersion {
     String domain = null;
     String gitHash = null;
@@ -22,6 +28,7 @@ class FlexVersion {
 
     boolean dirty = false;
     boolean tag = false;
+
 
     public FlexVersion (String domain, int commitCount, String gitHash, boolean tag, boolean dirty) {
         this.domain = domain;
@@ -44,6 +51,7 @@ class FlexVersion {
             this.fullVersion = "${this.fullVersion}-dirty";
         }
     }
+
 
     public String toString() {
         return this.fullVersion;
