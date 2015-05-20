@@ -34,6 +34,7 @@ import org.gradle.api.Project
 
 import com.palantir.gradle.versions.flexversioning.FlexVersion;
 import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
+import com.palantir.gradle.versions.flexversioning.GitUtils;
 import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
 class FlexVersionPlugin implements Plugin<Project> {
@@ -52,43 +53,22 @@ class FlexVersionPlugin implements Plugin<Project> {
     }
 
     static FlexVersion buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
-        Repository repo = getRepo(project);
+        Repository repo = GitUtils.getRepoFromProject(project);
 
         RevWalk walk = new RevWalk(repo);
 
+
         // Find the HEAD commit and ref
-        AnyObjectId headId = repo.resolve(Constants.HEAD);
-        RevCommit headCommit = walk.parseCommit(headId);
+        RevCommit headCommit = GitUtils.getCommitHead(repo);
         Ref headRef = repo.getRef(Constants.HEAD);
-        String headSha1 = headCommit.name();
-
-
-        // Find the first commit
-        walk.sort(RevSort.REVERSE);
-        walk.markStart(headCommit);
-        RevCommit firstCommit = walk.next();
 
 
         // Count commits
-        int commitCount = RevWalkUtils.count(walk, headCommit, firstCommit);
+        int commitCount = GitUtils.countCommitHistory(repo, headCommit);
 
 
-        /*
-         * Figure out if there is a tag on the HEAD commit.
-         * If there are more than one tags, then we pick the
-         * one git describe picks
-         */
-        String domainIfTag = null;
-        String gitDescribe = Git.wrap(repo).describe().setTarget("HEAD").call();
-        repo.tags.each { k, v ->
-            String refname = v.getName();
-            if (refname.startsWith("refs/tags/")) {
-                refname = refname.substring("refs/tags/".length());
-            }
-            if (gitDescribe.equals(refname)) {
-                domainIfTag = refname;
-            }
-        }
+        // Find the tag on the HEAD commit
+        String domainIfTag = GitUtils.getTagOnCommit(repo, Constants.HEAD);
 
 
         // Check passed in environment variable list
@@ -142,24 +122,7 @@ class FlexVersionPlugin implements Plugin<Project> {
             }
         }
 
-        // Dirty bit
-        boolean isDirty = !Git.wrap(repo).status().call().isClean();
-
-        return new FlexVersion(domain, commitCount, headSha1, tag, isDirty);
-    }
-
-    private static Repository getRepo(Project project) {
-        File repoLocation = Paths.get(project.projectDir.toString(), ".git").toFile();
-        Repository repo;
-        try {
-            repo = new FileRepositoryBuilder().readEnvironment()
-                    .findGitDir(repoLocation).build();
-        } catch (IllegalArgumentException iae) {
-            //TODO: Throw exception from this plugin
-            throw iae;
-        }
-
-        return repo;
+        return new FlexVersion(domain, commitCount, headCommit.name(), tag, GitUtils.isDirtyRepo(repo));
     }
 
 }
