@@ -1,6 +1,6 @@
 // Copyright 2015 Palantir Technologies
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -73,7 +73,11 @@ class FlexVersionPlugin implements Plugin<Project> {
         int commitCount = RevWalkUtils.count(walk, headCommit, firstCommit);
 
 
-        // Find if there is a tag on the HEAD commit.
+        /*
+         * Figure out if there is a tag on the HEAD commit.
+         * If there are more than one tags, then we pick the
+         * one git describe picks
+         */
         String domainIfTag = null;
         String gitDescribe = Git.wrap(repo).describe().setTarget("HEAD").call();
         repo.tags.each { k, v ->
@@ -100,11 +104,6 @@ class FlexVersionPlugin implements Plugin<Project> {
                 break;
             }
         }
-
-
-        // Dirty bit
-        boolean isDirty = !Git.wrap(repo).status().call().isClean();
-        String dirty = isDirty ? "-dirty" : "";
 
 
         /*
@@ -142,6 +141,9 @@ class FlexVersionPlugin implements Plugin<Project> {
                 throw new Exception("Domain [${domain}] does not match the required pattern ${flexExtension.domainPattern}.");
             }
         }
+
+        // Dirty bit
+        boolean isDirty = !Git.wrap(repo).status().call().isClean();
 
         return new FlexVersion(domain, commitCount, headSha1, tag, isDirty);
     }
