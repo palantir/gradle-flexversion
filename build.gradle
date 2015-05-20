@@ -28,7 +28,7 @@ dependencies {
 
 apply plugin: 'gradle-flexversion'
 
-flexVersion {
+flexversion {
   useTags = true
 }
 
