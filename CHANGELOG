@@ -1,5 +1,10 @@
 CHANGELOG
 
+Future Version
+=======
+-Breaking: printVersion task not automatically applied. Use addPrintVersionTask() to do so
+-Breaking: 'fullVersion' property from FlexVersion object is gone
+
 0.4.0
 =======
 -Breaking: FlexVersion object now returned instead of string.

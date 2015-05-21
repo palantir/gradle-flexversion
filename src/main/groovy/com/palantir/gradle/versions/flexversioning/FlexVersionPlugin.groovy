@@ -1,6 +1,6 @@
 // Copyright 2015 Palantir Technologies
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -34,13 +34,15 @@ import org.gradle.api.Project
 
 import com.palantir.gradle.versions.flexversioning.FlexVersion;
 import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
+import com.palantir.gradle.versions.flexversioning.GitUtils;
 import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
 class FlexVersionPlugin implements Plugin<Project> {
 
-    public static final String GROUP = "Flex Versioning";
     private static final String DOMAIN_OVERRIDE_PROPERTY = "FLEX_VERSION_DOMAIN_OVERRIDE";
     private static final String DOMAIN_TAG_PROPERTY = "FLEX_VERSION_USE_TAG";
+
+    public static final String GROUP = "Flex Versioning";
 
     @Override
     public void apply(Project project) {
@@ -48,44 +50,25 @@ class FlexVersionPlugin implements Plugin<Project> {
         FlexVersionConvention convention = new FlexVersionConvention(project, extension);
         project.getConvention().getPlugins().put("flexversion", convention);
         project.getExtensions().add("flexversion", extension);
-
-        project.getTasks().create("printVersion", PrintVersionTask.class);
     }
 
     static FlexVersion buildFlexVersion(Project project, String userDomain, FlexVersionExtension flexExtension) {
-        Repository repo = getRepo(project);
+        Repository repo = GitUtils.getRepoFromProject(project);
 
         RevWalk walk = new RevWalk(repo);
 
+
         // Find the HEAD commit and ref
-        AnyObjectId headId = repo.resolve(Constants.HEAD);
-        RevCommit headCommit = walk.parseCommit(headId);
+        RevCommit headCommit = GitUtils.getCommitHead(repo);
         Ref headRef = repo.getRef(Constants.HEAD);
-        String headSha1 = headCommit.name();
-
-
-        // Find the first commit
-        walk.sort(RevSort.REVERSE);
-        walk.markStart(headCommit);
-        RevCommit firstCommit = walk.next();
 
 
         // Count commits
-        int commitCount = RevWalkUtils.count(walk, headCommit, firstCommit);
+        int commitCount = GitUtils.countCommitHistory(repo, headCommit);
 
 
-        // Find if there is a tag on the HEAD commit.
-        String domainIfTag = null;
-        String gitDescribe = Git.wrap(repo).describe().setTarget("HEAD").call();
-        repo.tags.each { k, v ->
-            String refname = v.getName();
-            if (refname.startsWith("refs/tags/")) {
-                refname = refname.substring("refs/tags/".length());
-            }
-            if (gitDescribe.equals(refname)) {
-                domainIfTag = refname;
-            }
-        }
+        // Find the tag on the HEAD commit
+        String domainIfTag = GitUtils.getTagOnCommit(repo, Constants.HEAD);
 
 
         // Check passed in environment variable list
@@ -101,11 +84,6 @@ class FlexVersionPlugin implements Plugin<Project> {
                 break;
             }
         }
-
-
-        // Dirty bit
-        boolean isDirty = !Git.wrap(repo).status().call().isClean();
-        String dirty = isDirty ? "-dirty" : "";
 
 
         /*
@@ -144,21 +122,7 @@ class FlexVersionPlugin implements Plugin<Project> {
             }
         }
 
-        return new FlexVersion(domain, commitCount, headSha1, tag, isDirty);
-    }
-
-    private static Repository getRepo(Project project) {
-        File repoLocation = Paths.get(project.projectDir.toString(), ".git").toFile();
-        Repository repo;
-        try {
-            repo = new FileRepositoryBuilder().readEnvironment()
-                    .findGitDir(repoLocation).build();
-        } catch (IllegalArgumentException iae) {
-            //TODO: Throw exception from this plugin
-            throw iae;
-        }
-
-        return repo;
+        return new FlexVersion(domain, commitCount, headCommit.name(), tag, GitUtils.isDirtyRepo(repo));
     }
 
 }

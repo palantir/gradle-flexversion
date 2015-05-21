@@ -8,7 +8,7 @@ The second reason is that most other versioning schemes out there are not flexib
 ## How does it work?
 Any git commit is part of a set of 'domains'.  The version of this commit then becomes `$DOMAIN-$N-g$X`.  `$DOMAIN` is one of the domains it belongs to. `$N` is the number of commits in the commit's entire history. `$X` is the 12-character prefix of the SHA1 of the commit.  This has the same format as the `git describe` command so the domain version can be used in any git command and git will do "do the right thing".
 
-Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versioning will use the tag if the commit has a tag on it and the environment variable `FLEX_VERSION_USE_TAG` is set or property `useTags` is `true`.  If there are multiple tags on one commit, it will use the tag `git describe` would have picked.
+Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versioning will use the tag if the commit has a tag on it and the environment variable `FLEX_VERSION_USE_TAG` is set or property `useTags` is `true`.  If there are multiple tags on one commit, it will use the tag `git describe` would have picked.  This means that the tag should be an annoted tag.
 
 
 ## Adding it to Gradle
@@ -53,7 +53,7 @@ user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
 b7feb2b69d01d39648031a60d8bb473f094437d3 Add environment variables in the README as well
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 develop-59-b7feb2b69d01
-user:~/git/flexversions-example (develop) $ git tag 0.1.0 b7feb2b69d01 # Let's tag the current commit
+user:~/git/flexversions-example (develop) $ git tag -a 0.1.0 b7feb2b69d01 -m "Release 0.1.0" # Let's tag the current commit
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 0.1.0
 ```
@@ -79,7 +79,7 @@ user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
 b7feb2b69d01d39648031a60d8bb473f094437d3 Add environment variables in the README as well
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 2.3.0-dev-59-b7feb2b69d01
-user:~/git/flexversions-example (develop) $ git tag 2.3.0 b7feb2b69d01 # Let's tag the current commit
+user:~/git/flexversions-example (develop) $ git tag -a 2.3.0 b7feb2b69d01 -m "Release 2.3.0" # Let's tag the current commit
 user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 2.3.0
 ```
@@ -134,12 +134,11 @@ class FlexVesion {
 	int commitCount // The number of commits in HEAD's history
 	boolean dirty // Is the dirty bit set?
 	boolean tag // Is the domain from a tag?
-	String fullVersion // The fully filled in version that Gradle would use
-	String toString() // Return fullVersion String
+	String toString() // The fully filled in version that Gradle would use
 }
 ```
 
-Even though the `fullVersion` of a version using tags only has the tag value, the `FlexVersion` object returned will still have the `gitHash` and `commitCount` values set.
+Even though the `toString()` of a version using tags only has the tag value, the `FlexVersion` object returned will still have the `gitHash` and `commitCount` values set.
 
 ### Use Case: Enforcing domains to have a format
 

@@ -1,6 +1,6 @@
 // Copyright 2015 Palantir Technologies
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -13,15 +13,21 @@
 // limitations under the License.
 package com.palantir.gradle.versions.flexversioning
 
+/*
+ * POGO containing all the versioning information.  It can be used by the
+ * standard version property of Gradle.  In addition, the code can grab
+ * the individual portions of the constructed version without having to
+ * parse the resulting string.
+ */
 class FlexVersion {
-    String domain = null;
-    String gitHash = null;
-    String fullVersion = null;
+    final String domain;
+    final String gitHash;
 
-    int commitCount = -1;
+    final int commitCount;
 
-    boolean dirty = false;
-    boolean tag = false;
+    final boolean dirty;
+    final boolean tag;
+
 
     public FlexVersion (String domain, int commitCount, String gitHash, boolean tag, boolean dirty) {
         this.domain = domain;
@@ -33,19 +39,21 @@ class FlexVersion {
         if (this.gitHash.length() > 12) {
             this.gitHash = this.gitHash.substring(0, 12);
         }
+    }
 
+
+    public String toString() {
+        String version = null;
         if (this.tag) {
-            this.fullVersion = "${this.domain}"
+            version = "${this.domain}";
         } else {
-            this.fullVersion = "${this.domain}-${this.commitCount}-g${this.gitHash}";
+            version = "${this.domain}-${this.commitCount}-g${this.gitHash}";
         }
 
         if (this.dirty) {
-            this.fullVersion = "${this.fullVersion}-dirty";
+            version = "${version}-dirty";
         }
-    }
 
-    public String toString() {
-        return this.fullVersion;
+        return version;
     }
 }
