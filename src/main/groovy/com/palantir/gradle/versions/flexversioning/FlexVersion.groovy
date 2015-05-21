@@ -20,14 +20,14 @@ package com.palantir.gradle.versions.flexversioning
  * parse the resulting string.
  */
 class FlexVersion {
-    String domain = null;
-    String gitHash = null;
-    String fullVersion = null;
+    final String domain;
+    final String gitHash;
+    final String fullVersion;
 
-    int commitCount = -1;
+    final int commitCount;
 
-    boolean dirty = false;
-    boolean tag = false;
+    final boolean dirty;
+    final boolean tag;
 
 
     public FlexVersion (String domain, int commitCount, String gitHash, boolean tag, boolean dirty) {
