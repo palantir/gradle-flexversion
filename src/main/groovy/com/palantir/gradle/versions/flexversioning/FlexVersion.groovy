@@ -22,7 +22,6 @@ package com.palantir.gradle.versions.flexversioning
 class FlexVersion {
     final String domain;
     final String gitHash;
-    final String fullVersion;
 
     final int commitCount;
 
@@ -40,20 +39,21 @@ class FlexVersion {
         if (this.gitHash.length() > 12) {
             this.gitHash = this.gitHash.substring(0, 12);
         }
-
-        if (this.tag) {
-            this.fullVersion = "${this.domain}"
-        } else {
-            this.fullVersion = "${this.domain}-${this.commitCount}-g${this.gitHash}";
-        }
-
-        if (this.dirty) {
-            this.fullVersion = "${this.fullVersion}-dirty";
-        }
     }
 
 
     public String toString() {
-        return this.fullVersion;
+        String version = null;
+        if (this.tag) {
+            version = "${this.domain}";
+        } else {
+            version = "${this.domain}-${this.commitCount}-g${this.gitHash}";
+        }
+
+        if (this.dirty) {
+            version = "${version}-dirty";
+        }
+
+        return version;
     }
 }

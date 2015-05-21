@@ -134,12 +134,11 @@ class FlexVesion {
 	int commitCount // The number of commits in HEAD's history
 	boolean dirty // Is the dirty bit set?
 	boolean tag // Is the domain from a tag?
-	String fullVersion // The fully filled in version that Gradle would use
-	String toString() // Return fullVersion String
+	String toString() // The fully filled in version that Gradle would use
 }
 ```
 
-Even though the `fullVersion` of a version using tags only has the tag value, the `FlexVersion` object returned will still have the `gitHash` and `commitCount` values set.
+Even though the `toString()` of a version using tags only has the tag value, the `FlexVersion` object returned will still have the `gitHash` and `commitCount` values set.
 
 ### Use Case: Enforcing domains to have a format
 
