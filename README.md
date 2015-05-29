@@ -128,7 +128,7 @@ After the domain is picked, all `/` characters are converted to `-`.  If the cur
 The `flexVersion` method does not return a `String` object.  It returns a `FlexVersion` object.  It can be used as a parameter for Gradle's `version`.  Making this an object allows for pulling out pieces of the version string for other uses (if desired).
 
 ```groovy
-class FlexVesion {
+class FlexVersion {
 	String domain // The domain portion (or the tag value)
 	String gitHash // The git hash truncated to 12 characters
 	int commitCount // The number of commits in HEAD's history
