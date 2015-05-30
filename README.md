@@ -25,10 +25,10 @@ buildscript {
 		classpath 'com.palantir:gradle-flexversion:0.4.0'
 	}
 }
-```
 
 apply plugin: 'gradle-flexversion'
 version flexVersion()
+```
 
 ## Basic Usage
 
