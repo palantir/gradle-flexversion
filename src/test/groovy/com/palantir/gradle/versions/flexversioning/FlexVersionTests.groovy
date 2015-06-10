@@ -95,7 +95,7 @@ class FlexVersionTests {
     @Test
     public void testEnvironmentBasic() {
         project.flexversion.envvarSources << "buildRef"
-        assert "${System.env['buildRef'].replace('/','-')}-${commits}-g${headShaShort}" == project.flexVersion().toString()
+        assert "${System.env['buildRef_CLEAN'].replace('/','-')}-${commits}-g${headShaShort}" == project.flexVersion().toString()
     }
 
     @Test
