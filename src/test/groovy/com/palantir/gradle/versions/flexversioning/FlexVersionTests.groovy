@@ -36,10 +36,10 @@ class FlexVersionTests {
         repoFolder = new File("${System.properties['user.dir']}/${PROJECT_NAME}");
         repoFolder.deleteDir();
         repoFolder.mkdirs();
-        
+
         git = Git.init().setDirectory(repoFolder).call();
         repo = new FileRepositoryBuilder().findGitDir(repoFolder).build();
-        
+
         def commitMessages = [
                 "Initial commit",
                 "We can keep adding commits",
@@ -47,7 +47,7 @@ class FlexVersionTests {
                 "This is a refactor",
                 "Final commit"
             ]
-        
+
         for (message in commitMessages) {
             new File("${repoFolder}/myfile.txt").append("${System.currentTimeMillis()} - ${message}\n");
             git.add().addFilepattern("myfile.txt").call();
@@ -55,43 +55,43 @@ class FlexVersionTests {
             commits++;
         }
         commits--; // The HEAD commit is not counted
-        
+
         RevCommit head = new RevWalk(repo).parseCommit(repo.resolve(Constants.HEAD));
         headShaShort = head.name().substring(0,12);
-        
+
         git.tag().setAnnotated(true).setName(HEAD_TAG_NAME).setMessage("This is the ${HEAD_TAG_NAME} release...bugfix!").setObjectId(head).call();
     }
-    
+
     @Before
     public void setUpProject() {
         project = ProjectBuilder.builder().withProjectDir(repoFolder).withName(PROJECT_NAME).build();
         new FlexVersionPlugin().apply(project);
     }
-    
+
     @Test
     public void testBasic() {
         assert "master-${commits}-g${headShaShort}" == project.flexVersion().toString()
     }
-    
+
     @Test
     @Ignore
     public void testGlobalOverride() {
         //TODO: Can't actually do this (yet) since it would ruin the other tests.
         // Might require something clever later
     }
-    
+
     @Test
     public void testUserDomain() {
         assert "myownchoice-${commits}-g${headShaShort}" == project.flexVersion("myownchoice").toString()
     }
-    
+
     @Test
     public void testTag() {
         project.flexversion.useTags = true
         assert HEAD_TAG_NAME == project.flexVersion().toString()
         assert HEAD_TAG_NAME == project.flexVersion("myownchoice").toString()
     }
-    
+
     @Test
     public void testEnvironmentBasic() {
         project.flexversion.envvarSources << "buildRef"
