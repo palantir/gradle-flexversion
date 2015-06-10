@@ -25,6 +25,7 @@ dependencies {
   compile gradleApi()
   compile localGroovy()
   compile 'org.eclipse.jgit:org.eclipse.jgit:3.4.1.201406201815-r'
+  testCompile 'junit:junit:4.11'
 }
 
 apply plugin: 'gradle-flexversion'
@@ -70,4 +71,18 @@ task zipPublish (type: Zip) {
 publish << {
   file("${project.buildDir}/artifacts").mkdirs()
   tasks.zipPublish.execute()
+}
+
+
+test {
+  workingDir = file("${project.buildDir}/testing")
+  environment "buildRef", "fancybranchname"
+  environment "buildRef_CLEAN", "fancybranchname"
+  environment "GIT_BRANCH_FOR_TESTING", "refs/heads/feature/checkbox"
+  environment "GIT_BRANCH_FOR_TESTING_CLEAN", "feature/checkbox"
+  environment "git.branch", "gerrit/release/1.5"
+  environment "git.branch_CLEAN", "release/1.5"
+}.doFirst {
+  workingDir.deleteDir()
+  workingDir.mkdirs()
 }

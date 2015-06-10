@@ -14,6 +14,7 @@
 package com.palantir.gradle.versions.flexversioning
 
 import java.nio.file.Paths;
+import java.util.regex.Pattern
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.internal.storage.file.RefDirectory;
@@ -118,11 +119,16 @@ class FlexVersionPlugin implements Plugin<Project> {
         // Check if the domain matches the required pattern
         if (flexExtension.domainPattern != null) {
             if (!(flexExtension.domainPattern.matcher(domain).matches())) {
-                throw new Exception("Domain [${domain}] does not match the required pattern ${flexExtension.domainPattern}.");
+                throw new FlexVersionPatternException(domain, flexExtension.domainPattern);
             }
         }
 
         return new FlexVersion(domain, commitCount, headCommit.name(), tag, GitUtils.isDirtyRepo(repo));
     }
 
+    static class FlexVersionPatternException extends Exception {
+        public FlexVersionPatternException(String domain, Pattern pattern) {
+            super("Domain [${domain}] does not match the required pattern ${pattern}.")
+        }
+    }
 }
