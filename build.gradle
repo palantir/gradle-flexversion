@@ -75,10 +75,12 @@ publish << {
 
 
 test {
-  testLogging.showStandardStreams = true
   workingDir = file("${project.buildDir}/testing")
   environment "buildRef", "fancybranchname"
   environment "GIT_BRANCH_FOR_TESTING", "refs/heads/feature/checkbox"
+  environment "GIT_BRANCH_FOR_TESTING_CLEAN", "feature/checkbox"
+  environment "git.branch", "gerrit/release/1.5"
+  environment "git.branch_CLEAN", "release/1.5"
 }.doFirst {
   workingDir.deleteDir()
   workingDir.mkdirs()

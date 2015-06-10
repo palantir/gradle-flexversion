@@ -12,6 +12,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 class FlexVersionTests {
@@ -22,7 +23,7 @@ class FlexVersionTests {
     static File repoFolder;
     static Git git;
     static Repository repo;
-    static String headSha;
+    static String headShaShort;
     static int commits = 0;
 
     Project project;
@@ -50,9 +51,10 @@ class FlexVersionTests {
             git.commit().setMessage(message).call();
             commits++;
         }
+        commits--; // The HEAD commit is not counted
         
         RevCommit head = new RevWalk(repo).parseCommit(repo.resolve(Constants.HEAD));
-        headSha = head.name();
+        headShaShort = head.name().substring(0,12);
         
         git.tag().setAnnotated(true).setName(tag).setMessage("This is the ${tag} release...bugfix!").setObjectId(head).call();
     }
@@ -64,19 +66,32 @@ class FlexVersionTests {
     }
     
     @Test
-    public void one () {
-        println project.flexVersion()
+    public void testBasic() {
+        assert "master-${commits}-g${headShaShort}" == project.flexVersion().toString()
     }
     
     @Test
-    public void two () {
+    @Ignore
+    public void testGlobalOverride() {
+        //TODO: Can't actually do this (yet) since it would ruin the other tests.
+        // Might require something clever later
+    }
+    
+    @Test
+    public void testUserDomain() {
+        assert "myownchoice-${commits}-g${headShaShort}" == project.flexVersion("myownchoice").toString()
+    }
+    
+    @Test
+    public void testTag() {
         project.flexversion.useTags = true
-        println project.flexVersion()
+        assert tag == project.flexVersion().toString()
+        assert tag == project.flexVersion("myownchoice").toString()
     }
     
     @Test
-    public void three() {
+    public void testEnvironmentBasic() {
         project.flexversion.envvarSources << "buildRef"
-        println project.flexVersion()
+        assert "${System.env['buildRef']}-${commits}-g${headShaShort}" == project.flexVersion().toString()
     }
 }
