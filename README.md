@@ -90,7 +90,7 @@ user:~/git/flexversions-example (develop) $ ./gradlew printVersion --quiet
 There is a `flexVersion` closure for setting up the plugin.  Below are the properties in the closure with examples of using each.
 
 ```gradle
-flexVersion {
+flexversion {
 	envvarSources << "GIT_BRANCH" << "GERRIT_BRANCH"
 	stripRefs << "myremote/"
 	domainPattern = ~/\d+\.\d+\.\d/
@@ -116,7 +116,7 @@ The plugin will pick a domain in the following order:
 
 1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE`. (example: `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew publish`)
 2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set or the property `useTags` is `true` and the commit has a tag.  **No commit counts or git hash are appended in this case**
-3.  Environment variable from a user-provided list in the `flexVersion` closure property `envvarSources`
+3.  Environment variable from a user-provided list in the `flexversion` closure property `envvarSources`
 4.  Passed in by the user as a parameter to `flexVersion()`
 5.  Reading the symbolic ref of HEAD (This will basically use the local branch name)
 6.  The value `unspecified`
