@@ -2,11 +2,14 @@ CHANGELOG
 
 Future Version
 =======
+-
+
+0.5.0
+=======
 -Breaking: printVersion task not automatically applied. Use addPrintVersionTask() to do so
 -Breaking: 'fullVersion' property from FlexVersion object is gone
 -Vagrantfile for building
 -Testing added.  Only doesn't test global override environment variable
-
 
 0.4.0
 =======
