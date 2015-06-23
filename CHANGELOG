@@ -2,7 +2,7 @@ CHANGELOG
 
 Future Version
 =======
--
+-Breaking: FlexVersion object property 'tag' renamed to 'isTag'
 
 0.5.0
 =======
