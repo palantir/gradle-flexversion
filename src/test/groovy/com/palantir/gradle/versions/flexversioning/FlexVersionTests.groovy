@@ -131,7 +131,7 @@ class FlexVersionTests {
         assert version.domain == "objecttest"
         assert version.commitCount == commits
         assert version.gitHash == headShaShort
-        assert version.tag == false
+        assert version.isTag == false
         assert version.toString() == "objecttest-${commits}-g${headShaShort}"
     }
 
@@ -142,7 +142,7 @@ class FlexVersionTests {
         assert version.domain == HEAD_TAG_NAME
         assert version.commitCount == commits
         assert version.gitHash == headShaShort
-        assert version.tag == true
+        assert version.isTag == true
         assert version.toString() == HEAD_TAG_NAME
     }
 }
