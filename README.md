@@ -133,7 +133,7 @@ class FlexVersion {
 	String gitHash // The git hash truncated to 12 characters
 	int commitCount // The number of commits in HEAD's history
 	boolean dirty // Is the dirty bit set?
-	boolean tag // Is the domain from a tag?
+	boolean isTag // Is the domain from a tag?
 	String toString() // The fully filled in version that Gradle would use
 }
 ```

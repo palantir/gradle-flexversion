@@ -2,6 +2,7 @@ CHANGELOG
 
 Future Version
 =======
+-Breaking: FlexVersion object property 'tag' renamed to 'isTag'
 -Breaking: Since symlink support was added (jgit is fun), this will no longer work with Java 6
 
 0.5.0

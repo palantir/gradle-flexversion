@@ -26,14 +26,14 @@ class FlexVersion {
     final int commitCount;
 
     final boolean dirty;
-    final boolean tag;
+    final boolean isTag;
 
 
-    public FlexVersion (String domain, int commitCount, String gitHash, boolean tag, boolean dirty) {
+    public FlexVersion (String domain, int commitCount, String gitHash, boolean isTag, boolean dirty) {
         this.domain = domain;
         this.commitCount = commitCount;
         this.gitHash = gitHash;
-        this.tag = tag;
+        this.isTag = isTag;
         this.dirty = dirty;
 
         if (this.gitHash.length() > 12) {
@@ -44,7 +44,7 @@ class FlexVersion {
 
     public String toString() {
         String version = null;
-        if (this.tag) {
+        if (this.isTag) {
             version = "${this.domain}";
         } else {
             version = "${this.domain}-${this.commitCount}-g${this.gitHash}";
