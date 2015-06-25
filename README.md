@@ -43,10 +43,11 @@ apply plugin: 'gradle-flexversion'
 flexversion {
 	useTags = true
 }
+addPrintVersionTask()
 version flexVersion()
 ```
 
-We can use the included `printVersion` task the plugin adds to see what the version is.
+With `addPrintVersionTask()`, we get a `printVersion` task the plugin adds to see what the version is.
 
 ```console
 user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
@@ -69,10 +70,11 @@ apply plugin: 'gradle-flexversion'
 flexversion {
 	useTags = true
 }
+addPrintVersionTask()
 version flexVersion("2.3.0-dev")
 ```
 
-We can use the included `printVersion` task the plugin adds to see what the version is.
+With `addPrintVersionTask()`, we get a `printVersion` task the plugin adds to see what the version is.
 
 ```console
 user:~/git/flexversions-example (develop) $ git log -1 --format=oneline
