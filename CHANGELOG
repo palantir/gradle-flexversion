@@ -4,6 +4,10 @@ Future Version
 =======
 
 
+0.7.0
+=======
+-Better no git repo exception (Issue #27)
+
 0.6.0
 =======
 -Breaking: FlexVersion object property 'tag' renamed to 'isTag'
