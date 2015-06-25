@@ -18,14 +18,18 @@ import groovy.transform.PackageScope;
 import java.nio.file.Paths;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.RevWalkUtils;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.eclipse.jgit.util.FS;
+import org.gradle.api.GradleException
 import org.gradle.api.Project;
 
 class GitUtils {
@@ -34,13 +38,21 @@ class GitUtils {
      * Given a Gradle project, return its Git Repository
      */
     static Repository getRepoFromProject(Project project) {
-        File repoLocation = Paths.get(project.projectDir.toString(), ".git").toFile();
         Repository repo;
         try {
-            repo = new FileRepositoryBuilder().readEnvironment()
-                    .findGitDir(repoLocation).build();
-        } catch (IllegalArgumentException iae) {
-            throw iae;
+            /* Check if it found a git dir and set anything if not because
+             * build() thinks we didn't try to set one otherwise.
+             * 'mustExist' boolean only works if gitDir is set explicitly
+             */
+
+            FileRepositoryBuilder repoBuilder = new FileRepositoryBuilder();
+            repoBuilder.setMustExist(true).findGitDir(project.projectDir);
+            if (repoBuilder.getGitDir() == null) {
+                repoBuilder.setGitDir(project.projectDir);
+            }
+            repo = repoBuilder.build();
+        } catch (RepositoryNotFoundException rnfe) {
+            throw new GradleException("Flex Version plugin needs a project in a git repo to work.")
         }
 
         return repo;
