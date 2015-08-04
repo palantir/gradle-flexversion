@@ -2,7 +2,7 @@ CHANGELOG
 
 Future Version
 =======
-
+-Breaking (Possibly): Fixed a bug with an off-by-one error in counting the number of commits
 
 0.7.0
 =======
