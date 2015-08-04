@@ -13,24 +13,17 @@
 // limitations under the License.
 package com.palantir.gradle.versions.flexversioning
 
-import groovy.transform.PackageScope;
-
-import java.nio.file.Paths;
-
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.errors.RepositoryNotFoundException;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryCache;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevSort;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.RevWalkUtils;
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.errors.RepositoryNotFoundException
+import org.eclipse.jgit.lib.AnyObjectId
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.revwalk.RevWalkUtils
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.eclipse.jgit.util.FS;
 import org.gradle.api.GradleException
-import org.gradle.api.Project;
+import org.gradle.api.Project
 
 class GitUtils {
 
@@ -73,10 +66,7 @@ class GitUtils {
      */
     static int countCommitHistory(Repository repo, RevCommit commit) {
         RevWalk walk = new RevWalk(repo);
-        walk.sort(RevSort.REVERSE);
-        walk.markStart(commit);
-        RevCommit firstCommit = walk.next();
-        return RevWalkUtils.count(walk, commit, firstCommit);
+        return RevWalkUtils.count(walk, commit, null);
     }
 
 
