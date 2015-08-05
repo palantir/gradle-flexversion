@@ -2,6 +2,9 @@ CHANGELOG
 
 Future Version
 =======
+
+0.8.0
+=======
 -Breaking (Possibly): Changed the commit count logic to use null as the end commit. This should fix the count
      * Older built versions' count # in a non tag version may be different now
      * In general, it was off by one commit if a single line of commits existing (no merges)

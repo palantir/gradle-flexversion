@@ -22,7 +22,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.palantir:gradle-flexversion:0.7.0'
+		classpath 'com.palantir:gradle-flexversion:0.8.0'
 	}
 }
 
@@ -133,7 +133,7 @@ The `flexVersion` method does not return a `String` object.  It returns a `FlexV
 class FlexVersion {
 	String domain // The domain portion (or the tag value)
 	String gitHash // The git hash truncated to 12 characters
-	int commitCount // The number of commits in HEAD's history
+	int commitCount // The number of commits in HEAD's history (including HEAD itself)
 	boolean dirty // Is the dirty bit set?
 	boolean isTag // Is the domain from a tag?
 	String toString() // The fully filled in version that Gradle would use
