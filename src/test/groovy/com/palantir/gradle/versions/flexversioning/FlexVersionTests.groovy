@@ -1,22 +1,19 @@
 package com.palantir.gradle.versions.flexversioning
 
-import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.internal.storage.file.FileRepository
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Ignore
+import org.junit.Test
 
-import com.palantir.gradle.versions.flexversioning.FlexVersionPlugin.FlexVersionPatternException;
-import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.IllegalArgumentException;
+import com.palantir.gradle.versions.flexversioning.FlexVersionPlugin.FlexVersionPatternException
 
 class FlexVersionTests {
 
@@ -54,7 +51,6 @@ class FlexVersionTests {
             git.commit().setMessage(message).call();
             commits++;
         }
-        commits--; // The HEAD commit is not counted
 
         RevCommit head = new RevWalk(repo).parseCommit(repo.resolve(Constants.HEAD));
         headShaShort = head.name().substring(0,12);
