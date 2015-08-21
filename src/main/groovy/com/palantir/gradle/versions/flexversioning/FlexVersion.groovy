@@ -19,7 +19,7 @@ package com.palantir.gradle.versions.flexversioning
  * the individual portions of the constructed version without having to
  * parse the resulting string.
  */
-class FlexVersion {
+class FlexVersion implements Serializable {
     final String domain;
     final String gitHash;
 
