@@ -6,7 +6,7 @@ Future Version
 
 0.8.1
 =======
--Add serialversion UID to FlexVersion object
+-Make FlexVersion object serializable
 
 0.8.0
 =======
