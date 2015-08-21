@@ -20,6 +20,8 @@ package com.palantir.gradle.versions.flexversioning
  * parse the resulting string.
  */
 class FlexVersion implements Serializable {
+    private static final long serialVersionUID = -1230434938069850636L;
+
     final String domain;
     final String gitHash;
 
