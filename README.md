@@ -22,7 +22,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'com.palantir:gradle-flexversion:0.8.1'
+		classpath 'com.palantir:gradle-flexversion:0.9.0'
 	}
 }
 
