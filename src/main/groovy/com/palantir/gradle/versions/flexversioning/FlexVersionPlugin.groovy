@@ -13,30 +13,15 @@
 // limitations under the License.
 package com.palantir.gradle.versions.flexversioning
 
-import java.nio.file.Paths;
 import java.util.regex.Pattern
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.internal.storage.file.RefDirectory;
-import org.eclipse.jgit.internal.storage.file.RefDirectory.LooseUnpeeled;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.SymbolicRef
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevSort;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.RevWalkUtils;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.Ref
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.revwalk.RevWalk
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-
-import com.palantir.gradle.versions.flexversioning.FlexVersion;
-import com.palantir.gradle.versions.flexversioning.FlexVersionExtension;
-import com.palantir.gradle.versions.flexversioning.GitUtils;
-import com.palantir.gradle.versions.flexversioning.PrintVersionTask;
 
 class FlexVersionPlugin implements Plugin<Project> {
 
@@ -103,10 +88,10 @@ class FlexVersionPlugin implements Plugin<Project> {
         } else if ((System.env[DOMAIN_TAG_PROPERTY] != null || flexExtension.useTags) && domainIfTag != null) {
             domain = domainIfTag;
             tag = true;
-        } else if (envvarDomain != null) {
-            domain = envvarDomain;
         } else if (userDomain != null && !userDomain.trim().isEmpty()) {
             domain = userDomain.trim();
+        } else if (envvarDomain != null) {
+            domain = envvarDomain;
         } else if (headRef.isSymbolic()){
             domain = headRef.getTarget().getName();
             if (domain.startsWith("refs/heads/")) {
