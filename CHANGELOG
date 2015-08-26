@@ -2,6 +2,7 @@ CHANGELOG
 
 Future Version
 =======
+-Breaking: Somehow the order of domain picking was wrong. A user-defined domain should be prioritized over environment variables
 
 0.8.1
 =======

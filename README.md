@@ -118,8 +118,8 @@ The plugin will pick a domain in the following order:
 
 1.  Set by environment variable `FLEX_VERSION_DOMAIN_OVERRIDE`. (example: `FLEX_VERSION_DOMAIN_OVERRIDE=foo ./gradlew publish`)
 2.  Set by a tag if and only if environment variable `FLEX_VERSION_USE_TAG` is set or the property `useTags` is `true` and the commit has a tag.  **No commit counts or git hash are appended in this case**
-3.  Environment variable from a user-provided list in the `flexversion` closure property `envvarSources`
-4.  Passed in by the user as a parameter to `flexVersion()`
+3.  Passed in by the user as a parameter to `flexVersion()`
+4.  Environment variable from a user-provided list in the `flexversion` closure property `envvarSources`
 5.  Reading the symbolic ref of HEAD (This will basically use the local branch name)
 6.  The value `unspecified`
 
