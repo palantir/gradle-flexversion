@@ -56,6 +56,9 @@ class GitUtils {
      */
     static RevCommit getCommitHead(Repository repo) {
         AnyObjectId headId = repo.resolve(Constants.HEAD);
+        if (headId == null) {
+            throw new IllegalStateException("The git repo doesn't have any commits on the current branch.  Flex Version cannot generate a version for a repo without commits.")
+        }
         return (new RevWalk(repo)).parseCommit(headId);
     }
 
