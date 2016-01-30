@@ -4,6 +4,10 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: "com.gradle.plugin-publish"
+
+project.ext."gradle.publish.key" = System.env.GRADLE_PUBLISH_KEY
+project.ext."gradle.publish.secret" = System.env.GRADLE_PUBLISH_SECRET
 
 repositories {
   mavenCentral()
@@ -14,10 +18,14 @@ buildscript {
     maven {
         url "http://dl.bintray.com/palantir/releases"
     }
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
     mavenCentral()
   }
   dependencies {
     classpath "com.palantir:gradle-flexversion:0.8.1"
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.3"
   }
 }
 
@@ -85,4 +93,18 @@ test {
 }.doFirst {
   workingDir.deleteDir()
   workingDir.mkdirs()
+}
+
+pluginBundle {
+  website = "https://github.com/palantir/gradle-flexversion"
+  vcsUrl = "https://github.com/palantir/gradle-flexversion"
+  description = "Gradle FlexVersion is a plugin to calculate the flex version of a repo."
+  tags = ['git', 'version']
+
+  plugins {
+    flexVersionPlugin {
+      id = 'com.palantir.flexversion'
+      displayName = "Palantir Gradle Flex Version"
+    }
+  }
 }

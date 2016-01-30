@@ -2,6 +2,7 @@ CHANGELOG
 
 Future Version
 =======
+-Breaking: Renamed plugin to com.palantir.flexversion to follow other Palantir plugins.gradle.org naming convention
 
 0.9.0
 =======

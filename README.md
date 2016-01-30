@@ -26,7 +26,7 @@ buildscript {
 	}
 }
 
-apply plugin: 'gradle-flexversion'
+apply plugin: 'com.palantir.flexversion'
 version flexVersion()
 ```
 
@@ -39,7 +39,7 @@ The default usage of Flex Versions picks the branch name as the domain.  If the 
 The `build.gradle` file has the following set up for versioning:
 
 ```gradle
-apply plugin: 'gradle-flexversion'
+apply plugin: 'com.palantir.flexversion'
 flexversion {
 	useTags = true
 }
@@ -66,7 +66,7 @@ If you don't wish to use the branch name as the domain, `flexVersion()` will als
 The `build.gradle` file has the following set up for versioning:
 
 ```gradle
-apply plugin: 'gradle-flexversion'
+apply plugin: 'com.palantir.flexversion'
 flexversion {
 	useTags = true
 }
