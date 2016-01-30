@@ -83,7 +83,7 @@ test {
 pluginBundle {
   website = "https://github.com/palantir/gradle-flexversion"
   vcsUrl = "https://github.com/palantir/gradle-flexversion"
-  description = "Gradle FlexVersion is a plugin to calculate the flex version of a repo."
+  description = "Gradle FlexVersion is a plugin to calculate the flex version of a repo.  A flex version is constructed from a domain, the number of commits in HEAD's history, and a git hash.  A domain can be a branch name, a user-defined value, or unspecified.  If the HEAD commit has a tag, the tag will be the version #."
   tags = ['git', 'version']
 
   plugins {
