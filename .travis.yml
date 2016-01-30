@@ -5,7 +5,7 @@ cache:
   directories:
   - ".gradle"
 script:
-- ./gradlew build test publish --stacktrace
+- ./gradlew build test publish publishPlugins --stacktrace
 deploy:
   provider: releases
   api_key:

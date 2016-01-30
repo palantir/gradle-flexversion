@@ -108,3 +108,7 @@ pluginBundle {
     }
   }
 }
+
+publishPlugins.onlyIf {
+    System.getenv('TRAVIS_TAG') && project.version.toString() ==~ /\d+\.\d+\.\d+/
+}
