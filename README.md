@@ -14,19 +14,10 @@ Tags are unnecessary here.  However, if a "clean version" is wanted, Flex Versio
 ## Adding it to Gradle
 
 ```gradle
-buildscript {
-	repositories {
-		maven {
-			url "http://dl.bintray.com/palantir/releases"
-		}
-		mavenCentral()
-	}
-	dependencies {
-		classpath 'com.palantir:gradle-flexversion:0.9.0'
-	}
+plugins {
+	id "com.palantir.flexversion" version "0.9.2"
 }
 
-apply plugin: 'com.palantir.flexversion'
 version flexVersion()
 ```
 
@@ -39,7 +30,10 @@ The default usage of Flex Versions picks the branch name as the domain.  If the 
 The `build.gradle` file has the following set up for versioning:
 
 ```gradle
-apply plugin: 'com.palantir.flexversion'
+plugins {
+	id "com.palantir.flexversion" version "0.9.2"
+}
+
 flexversion {
 	useTags = true
 }
@@ -66,7 +60,10 @@ If you don't wish to use the branch name as the domain, `flexVersion()` will als
 The `build.gradle` file has the following set up for versioning:
 
 ```gradle
-apply plugin: 'com.palantir.flexversion'
+plugins {
+	id "com.palantir.flexversion" version "0.9.2"
+}
+
 flexversion {
 	useTags = true
 }
